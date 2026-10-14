@@ -1,0 +1,4307 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#185fa5">
+    <meta name="description" content="Calculadora y control quincenal de ingresos, horas extra, recargos y deducciones laborales en Colombia.">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mis Ingresos">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='128' fill='%23185fa5'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-size='280' font-weight='900' fill='%23ffffff'%3E$%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='128' fill='%23185fa5'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-size='280' font-weight='900' fill='%23ffffff'%3E$%3C/text%3E%3C/svg%3E">
+    <link rel="manifest" href="manifest.json">
+    <title>Control de Ingresos Laborales | Colombia</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --card-muted: #f1f5f9;
+            --tx: #0f172a;
+            --tx-muted: #64748b;
+            --bd: #e2e8f0;
+            --bd-focus: #3b82f6;
+            --primary: #1d4ed8;
+            --primary-hover: #1e40af;
+            --primary-light: #eff6ff;
+            --primary-text: #1d4ed8;
+            --ok-bg: #ecfdf5;
+            --ok-text: #065f46;
+            --ok-border: #a7f3d0;
+            --bad-bg: #fef2f2;
+            --bad-text: #991b1b;
+            --bad-border: #fecaca;
+            --warn-bg: #fffbeb;
+            --warn-text: #92400e;
+            --warn-border: #fde68a;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+
+        [data-theme="dark"] {
+            --bg: #090d16;
+            --card: #131b2e;
+            --card-muted: #1c263f;
+            --tx: #f8fafc;
+            --tx-muted: #94a3b8;
+            --bd: #263352;
+            --bd-focus: #60a5fa;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --primary-light: rgba(59, 130, 246, 0.15);
+            --primary-text: #93c5fd;
+            --ok-bg: #064e3b;
+            --ok-text: #a7f3d0;
+            --ok-border: #047857;
+            --bad-bg: #450a0a;
+            --bad-text: #fca5a5;
+            --bad-border: #991b1b;
+            --warn-bg: #451a03;
+            --warn-text: #fde68a;
+            --warn-border: #78350f;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #090d16;
+                --card: #131b2e;
+                --card-muted: #1c263f;
+                --tx: #f8fafc;
+                --tx-muted: #94a3b8;
+                --bd: #263352;
+                --bd-focus: #60a5fa;
+                --primary: #3b82f6;
+                --primary-hover: #60a5fa;
+                --primary-light: rgba(59, 130, 246, 0.15);
+                --primary-text: #93c5fd;
+                --ok-bg: #064e3b;
+                --ok-text: #a7f3d0;
+                --ok-border: #047857;
+                --bad-bg: #450a0a;
+                --bad-text: #fca5a5;
+                --bad-border: #991b1b;
+                --warn-bg: #451a03;
+                --warn-text: #fde68a;
+                --warn-border: #78350f;
+                --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+                --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+                --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--tx);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 84px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background: var(--card);
+            border-bottom: 1px solid var(--bd);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #1d4ed8, #06b6d4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .logo-text small {
+            font-size: 11px;
+            color: var(--tx-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .theme-btn {
+            background: var(--card-muted);
+            border: 1px solid var(--bd);
+            color: var(--tx);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--bd-focus);
+        }
+
+        main {
+            max-width: 640px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            flex: 1;
+        }
+
+        /* Pestañas de navegación principal inferior */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--bd);
+            display: flex;
+            justify-content: center;
+            z-index: 50;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab-bar-inner {
+            max-width: 640px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 6px 8px env(safe-area-inset-bottom, 6px);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--tx-muted);
+            font: inherit;
+            padding: 6px 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tab-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2;
+            transition: transform 0.15s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active svg {
+            transform: scale(1.1);
+            stroke: var(--primary);
+        }
+
+        /* Contenedor de vistas */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tarjetas y componentes */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--tx);
+        }
+
+        /* Selector de Quincena y Mes */
+        .period-bar {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 14px;
+        }
+
+        .q-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--card-muted);
+            padding: 4px;
+            border-radius: 10px;
+            gap: 4px;
+            border: 1px solid var(--bd);
+        }
+
+        .q-toggle button {
+            border: none;
+            background: none;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tx-muted);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .q-toggle button.on {
+            background: var(--card);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Banner Principal de Salario Neto */
+        .neto-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #0284c7 100%);
+            color: #ffffff;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.4), var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .neto-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #0284c7 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.45), var(--shadow-md);
+        }
+
+        .neto-banner .banner-sub {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .neto-banner .banner-sub span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .neto-banner .neto-val {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .neto-banner .prox-cobro {
+            font-size: 12.5px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.95;
+        }
+
+        /* Barra visual de distribución */
+        .progress-bar-container {
+            margin-bottom: 14px;
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--tx-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .multi-progress {
+            height: 10px;
+            border-radius: 5px;
+            background: var(--card-muted);
+            overflow: hidden;
+            display: flex;
+            gap: 2px;
+        }
+
+        .multi-progress-bar {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Grilla de métricas interactivas */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .metric-btn {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-btn:hover {
+            border-color: var(--bd-focus);
+            transform: translateY(-1px);
+        }
+
+        .metric-btn.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--tx-muted);
+            font-weight: 500;
+        }
+
+        .metric-val {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--tx);
+        }
+
+        .metric-btn.active .metric-val {
+            color: var(--tx);
+        }
+
+        /* Panel de detalle explicativo */
+        .detail-card {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 14px;
+            font-size: 13.5px;
+            color: var(--tx-muted);
+            line-height: 1.6;
+        }
+
+        .detail-card strong {
+            display: block;
+            color: var(--tx);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .detail-card pre {
+            white-space: pre-line;
+            font-family: inherit;
+        }
+
+        /* Formularios y Controles */
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--tx-muted);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input[type=text],
+        input[type=month],
+        input[type=date],
+        input[type=time],
+        select {
+            width: 100%;
+            font: inherit;
+            color: var(--tx);
+            background: var(--card-muted);
+            border: 1px solid var(--bd);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--bd-focus);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chk-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 13.5px;
+            cursor: pointer;
+            color: var(--tx);
+        }
+
+        .chk-container input[type=checkbox] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Campos de solo lectura (recargos automáticos) */
+        input[readonly] {
+            opacity: 0.85;
+            cursor: default;
+        }
+
+        .ro-val {
+            display: block;
+            font-size: 12px;
+            color: var(--primary-text);
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        /* Botones de acción */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font: inherit;
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--card-muted);
+            color: var(--tx);
+            border-color: var(--bd);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--bd-focus);
+        }
+
+        .btn-danger {
+            background: var(--bad-bg);
+            color: var(--bad-text);
+            border-color: var(--bad-border);
+        }
+
+        .btn-danger:hover {
+            filter: brightness(0.95);
+        }
+
+        /* Badge & Chips */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .badge-ok {
+            background: var(--ok-bg);
+            color: var(--ok-text);
+            border: 1px solid var(--ok-border);
+        }
+
+        .badge-warn {
+            background: var(--warn-bg);
+            color: var(--warn-text);
+            border: 1px solid var(--warn-border);
+        }
+
+        .badge-bad {
+            background: var(--bad-bg);
+            color: var(--bad-text);
+            border: 1px solid var(--bad-border);
+        }
+
+        .badge-info {
+            background: #ede9fe;
+            color: #5b21b6;
+            border: 1px solid #c4b5fd;
+        }
+
+        [data-theme="dark"] .badge-info {
+            background: #2e1065;
+            color: #ddd6fe;
+            border: 1px solid #6d28d9;
+        }
+
+        .badge-rest {
+            background: #ecfeff;
+            color: #0e7490;
+            border: 1px solid #a5f3fc;
+        }
+
+        [data-theme="dark"] .badge-rest {
+            background: #083344;
+            color: #a5f3fc;
+            border: 1px solid #155e75;
+        }
+
+        .reg-tipo-btn {
+            border: 1px solid var(--bd);
+            background: var(--card-muted);
+            color: var(--tx-muted);
+            transition: all 0.15s ease;
+            font-weight: 600;
+        }
+
+        .reg-tipo-btn.active {
+            background: var(--primary) !important;
+            color: #ffffff !important;
+            border-color: var(--primary) !important;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-install-header {
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.15), rgba(6, 182, 212, 0.15));
+            border-color: var(--primary);
+            color: var(--primary-text);
+        }
+
+        .btn-install-header:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .inst-tab-btn.active {
+            background: var(--primary) !important;
+            color: #ffffff !important;
+            border-color: var(--primary) !important;
+        }
+
+        /* Lista de turnos / jornadas */
+        .jornada-item {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            transition: border-color 0.15s;
+        }
+
+        .jornada-item:hover {
+            border-color: var(--bd-focus);
+        }
+
+        .jornada-main {
+            flex: 1;
+        }
+
+        .jornada-date {
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .jornada-hours {
+            font-size: 12.5px;
+            color: var(--tx-muted);
+        }
+
+        .jornada-breakdown {
+            margin-top: 5px;
+            font-size: 11.5px;
+            color: var(--primary-text);
+            font-weight: 500;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .breakdown-chip {
+            background: var(--card-muted);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--bd);
+        }
+
+        .btn-delete-icon {
+            background: none;
+            border: none;
+            color: var(--bad-text);
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.15s;
+        }
+
+        .btn-delete-icon:hover {
+            background: var(--bad-bg);
+        }
+
+        /* Modal emergente */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--card);
+            border: 1px solid var(--bd);
+            border-radius: var(--radius);
+            padding: 20px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            animation: modalPop 0.2s ease-out;
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Pestañas de sincronización y paneles */
+        .sync-tab-btn.active {
+            background: var(--primary) !important;
+            color: #ffffff !important;
+            border-color: var(--primary) !important;
+        }
+
+        .sync-panel {
+            animation: fadeIn 0.15s ease-in-out;
+        }
+
+        /* Toast flotante */
+        #toast {
+            position: fixed;
+            bottom: 84px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--tx);
+            color: var(--bg);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 99;
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================================= */
+        /* OPTIMIZACIÓN RESPONSIVA MÓVIL (Smartphones y pantallas pequeñas) */
+        /* ============================================================= */
+        @media (max-width: 600px) {
+            body {
+                padding-bottom: 76px;
+            }
+
+            main {
+                padding: 10px 12px;
+            }
+
+            .header-inner {
+                padding: 8px 12px;
+                gap: 6px;
+            }
+
+            .logo-area {
+                gap: 8px;
+                min-width: 0;
+                flex: 1;
+            }
+
+            .logo-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .logo-text {
+                min-width: 0;
+            }
+
+            .logo-text h1 {
+                font-size: 15px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .logo-text small {
+                font-size: 10px;
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                letter-spacing: 0;
+            }
+
+            .theme-btn {
+                padding: 5px 8px;
+                font-size: 11.5px;
+                border-radius: 16px;
+                gap: 4px;
+            }
+
+            #btnInstalarHeaderTxt {
+                display: none;
+            }
+
+            /* Selector de período cómodo y apilable */
+            .period-bar {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+
+            .q-toggle button {
+                padding: 8px 6px;
+                font-size: 12.5px;
+            }
+
+            /* Banner de Salario Neto adaptativo */
+            .neto-banner {
+                padding: 14px 16px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+
+            .neto-banner .neto-val {
+                font-size: clamp(24px, 7.5vw, 32px);
+                margin-bottom: 6px;
+            }
+
+            .neto-banner .banner-sub {
+                font-size: 12px;
+            }
+
+            .neto-banner .prox-cobro {
+                font-size: 11.5px;
+                padding-top: 6px;
+            }
+
+            /* Grilla de Métricas */
+            .metrics-grid {
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+
+            .metric-btn {
+                padding: 10px;
+                border-radius: 10px;
+            }
+
+            .metric-label {
+                font-size: 11px;
+            }
+
+            .metric-val {
+                font-size: 15px;
+            }
+
+            /* Formularios en móvil */
+            .form-grid {
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+
+            .form-grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            input[type=text],
+            input[type=month],
+            input[type=date],
+            input[type=time],
+            select {
+                font-size: 16px;
+                padding: 8px 10px;
+            }
+
+            .btn {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .btn-primary {
+                padding: 11px;
+                font-size: 14px;
+            }
+
+            /* Barra de pestañas inferior táctil */
+            .tab-bar-inner {
+                padding: 4px 4px max(4px, env(safe-area-inset-bottom, 4px));
+            }
+
+            .tab-btn {
+                padding: 4px 1px;
+                font-size: 10.5px;
+                gap: 2px;
+            }
+
+            .tab-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Modal adaptado a pantallas pequeñas */
+            .modal-card {
+                padding: 16px 14px;
+                max-height: 88vh;
+                overflow-y: auto;
+                width: 96%;
+            }
+        }
+
+        /* Vista de impresión */
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+                padding-bottom: 0;
+            }
+
+            header,
+            nav.tab-bar,
+            .btn,
+            .btn-row,
+            .q-toggle,
+            .theme-btn,
+            #toast,
+            .modal-backdrop {
+                display: none !important;
+            }
+
+            .view-section {
+                display: block !important;
+            }
+
+            #view-jornadas,
+            #view-horas,
+            #view-ajustes {
+                display: none !important;
+            }
+
+            .card,
+            .neto-banner,
+            .detail-card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .neto-banner {
+                background: #f4f4f4 !important;
+                color: #000 !important;
+            }
+        }
+        .estado-horas { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 20px; border-radius: var(--radius-sm); }
+        .estado-horas:not(:empty) { padding: 8px 10px; border: 1px solid transparent; }
+        .estado-horas.ok { background: var(--ok-bg); color: var(--ok-text); border-color: var(--ok-border); }
+        .estado-horas.pend { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+        .estado-horas.err { background: var(--bad-bg); color: var(--bad-text); border-color: var(--bad-border); }
+        /* Paleta por concepto: la misma en la barra de devengado, las casillas y el detalle */
+        .c-salario { --mc: #3b82f6; --mc-rgb: 59 130 246; --mt: #1d4ed8; }
+        .c-extras  { --mc: #10b981; --mc-rgb: 16 185 129; --mt: #047857; }
+        .c-aux     { --mc: #06b6d4; --mc-rgb: 6 182 212;  --mt: #0e7490; }
+        .c-ded     { --mc: #ef4444; --mc-rgb: 239 68 68;  --mt: #b91c1c; }
+        [data-theme="dark"] .c-salario { --mt: #93c5fd; }
+        [data-theme="dark"] .c-extras  { --mt: #6ee7b7; }
+        [data-theme="dark"] .c-aux     { --mt: #67e8f9; }
+        [data-theme="dark"] .c-ded     { --mt: #fca5a5; }
+
+        .multi-progress-bar.mc { background: var(--mc); }
+        .progress-header .c-ded { color: var(--mt); }
+
+        .metric-btn.mc {
+            background: rgb(var(--mc-rgb) / 0.08);
+            border-color: rgb(var(--mc-rgb) / 0.35);
+            border-left: 5px solid var(--mc);
+        }
+        .metric-btn.mc .metric-val { color: var(--mt); }
+        .metric-btn.mc:hover { border-color: var(--mc); }
+        .metric-btn.mc.active {
+            background: rgb(var(--mc-rgb) / 0.2);
+            border-color: var(--mc);
+            box-shadow: 0 0 0 1px var(--mc);
+        }
+        .metric-btn.mc.active .metric-val { color: var(--mt); }
+
+        .detail-card.mc { border-left: 5px solid var(--mc); }
+        .detail-card.mc strong { color: var(--mt); }
+        /* Calendario compacto de la quincena (pantalla Turnos) */
+        .q-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .q-day { display: flex; flex-direction: column; align-items: center; gap: 1px; min-height: 58px; padding: 6px 2px; font: inherit; color: var(--tx);
+                 background: var(--card); border: 1px solid var(--bd); border-radius: 10px; cursor: pointer; }
+        .q-day .qd-w { font-size: 10px; color: var(--tx-muted); }
+        .q-day .qd-n { font-size: 16px; font-weight: 700; line-height: 1.2; }
+        .q-day .qd-t { font-size: 11px; font-weight: 600; }
+        .q-day.dom .qd-n { color: #dc2626; }
+        .q-day.t-turno { background: var(--primary-light); border-color: var(--bd-focus); color: var(--primary-text); }
+        .q-day.t-descanso { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+        .q-day.t-ausencia { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+        .q-day.t-incapacidad { background: var(--bad-bg); border-color: var(--bad-border); color: var(--bad-text); }
+        .q-day.hoy .qd-w::after { content: " · hoy"; }
+        .q-day.sel { outline: 3px solid var(--primary); outline-offset: 1px; }
+        .q-leyenda { font-size: 12px; color: var(--tx-muted); margin: 10px 0 0; }
+        details.card > summary { list-style: none; cursor: pointer; }
+        details.card > summary::-webkit-details-marker { display: none; }
+        details.card > summary::after { content: "▾"; margin-left: 8px; color: var(--tx-muted); }
+        details.card[open] > summary::after { content: "▴"; }
+        #avisoFallo { position: sticky; top: 0; z-index: 9999; padding: 12px 14px; font-size: 13px; line-height: 1.4;
+                      background: var(--bad-bg); color: var(--bad-text); border-bottom: 2px solid var(--bad-border); }
+        #avisoFallo.warn { background: var(--warn-bg); color: var(--warn-text); border-bottom-color: var(--warn-border); }
+        #avisoFallo small { display: block; opacity: 0.85; margin-top: 4px; word-break: break-word; }
+        #avisoFallo button { margin-top: 8px; font: inherit; font-weight: 600; padding: 6px 12px; border-radius: 8px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <div class="header-inner">
+            <div class="logo-area">
+                <div class="logo-icon" aria-hidden="true">$</div>
+                <div class="logo-text">
+                    <h1>Mis Ingresos</h1>
+                    <small>Control Personal de Nómina Talma Colombia</small>
+                </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button id="btnInstalarHeader" class="theme-btn btn-install-header" aria-label="Instalar app o crear acceso directo" title="Instalar aplicación o crear acceso directo">
+                    <span>📲</span> <span id="btnInstalarHeaderTxt">Instalar</span>
+                </button>
+                <button id="themeToggle" class="theme-btn" aria-label="Cambiar tema de color">
+                    <span id="themeIcon">☀️</span> <span id="themeText">Claro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Barra de Selección de Período -->
+        <div class="period-bar">
+            <div>
+                <label for="mes">Mes de Trabajo</label>
+                <input type="month" id="mes">
+            </div>
+            <div>
+                <label>Período de Pago</label>
+                <div class="q-toggle" role="group" aria-label="Quincena de pago">
+                    <button type="button" id="q1" class="on">Pago 15</button>
+                    <button type="button" id="q2" class="">Pago 30</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PESTAÑA 1: RESUMEN / PAGO ================= -->
+        <section id="view-resumen" class="view-section">
+            <!-- Tarjeta destacada de Neto -->
+            <div class="neto-banner">
+                <div class="banner-sub">
+                    <span id="cap-fecha">Pago del 15 de octubre</span>
+                    <span id="badge-tipo-pago">Neto a recibir</span>
+                </div>
+                <div class="neto-val" id="neto">$0</div>
+                <div class="prox-cobro">
+                    <span>⏳</span>
+                    <div id="prox">Cargando…</div>
+                </div>
+            </div>
+
+            <!-- Barra visual de proporción de ingresos vs deducciones -->
+            <div class="progress-bar-container">
+                <div class="progress-header">
+                    <span id="prog-base">Devengado: $0</span>
+                    <span id="prog-ded" class="c-ded">Deducciones: $0</span>
+                </div>
+                <div class="multi-progress" title="Proporción de ingresos y deducciones">
+                    <div id="bar-salario" class="multi-progress-bar mc c-salario" style="width: 82.38%;"></div>
+                    <div id="bar-extras" class="multi-progress-bar mc c-extras" style="width: 0%;"></div>
+                    <div id="bar-aux" class="multi-progress-bar mc c-aux" style="width: 11.03%;"></div>
+                    <div id="bar-ded" class="multi-progress-bar mc c-ded" style="width: 6.59%;"></div>
+                </div>
+            </div>
+
+            <!-- Tarjetas de métricas -->
+            <div class="metrics-grid" id="btns"></div>
+
+            <!-- Explicación detallada del concepto seleccionado -->
+            <div class="detail-card" id="info">
+                <strong id="info-titulo">Salario quincenal ordinario</strong>
+                <pre id="info-cuerpo">Cargando…</pre>
+            </div>
+
+            <!-- Acciones de compartir / exportar desprendible -->
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="btnCopiarResumen" style="flex:1">
+                    📋 Copiar Volante (WhatsApp)
+                </button>
+                <button class="btn btn-secondary" id="btnImprimir" style="flex:1">
+                    🖨️ Imprimir / PDF
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 2: REGISTRAR JORNADA ================= -->
+        <section id="view-jornadas" class="view-section">
+            <div class="card">
+                <div class="card-title">
+                    <span>Calendario de la quincena</span>
+                    <span id="gridResumen" class="badge badge-ok"></span>
+                </div>
+                <div class="q-grid" id="jGrid"></div>
+                <p class="q-leyenda">Toca un día para registrarlo o editarlo. Número rojo: domingo o festivo.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span id="tituloRegistro">Registrar Turno o Novedad</span>
+                    <span id="festivoBadge" class="badge badge-ok" style="display: inline-flex;">🎉 Día de la Raza</span>
+                </div>
+
+                <!-- Selector de tipo de registro -->
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-bottom:14px">
+                    <button type="button" class="btn btn-secondary reg-tipo-btn active" data-tipo="turno" id="tipoBtnTurno" style="font-size:12px; padding:8px 2px">💼 Turno</button>
+                    <button type="button" class="btn btn-secondary reg-tipo-btn" data-tipo="descanso" id="tipoBtnDescanso" style="font-size:12px; padding:8px 2px">🏖️ Descanso</button>
+                    <button type="button" class="btn btn-secondary reg-tipo-btn" data-tipo="ausencia" id="tipoBtnAusencia" style="font-size:12px; padding:8px 2px">🚫 Ausencia</button>
+                    <button type="button" class="btn btn-secondary reg-tipo-btn" data-tipo="incapacidad" id="tipoBtnIncapacidad" style="font-size:12px; padding:8px 2px">🩺 Incapacidad</button>
+                </div>
+
+                <!-- Formulario 1: Turno Laboral Ordinario -->
+                <div id="panelFormTurno">
+                    <div class="form-grid-3">
+                        <div>
+                            <label for="jf">Fecha</label>
+                            <input type="date" id="jf">
+                        </div>
+                        <div>
+                            <label for="je">Entrada</label>
+                            <input type="time" id="je">
+                        </div>
+                        <div>
+                            <label for="js">Salida</label>
+                            <input type="time" id="js">
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-secondary" id="bent" style="flex:1">⏱️ Entrada ahora</button>
+                        <button type="button" class="btn btn-secondary" id="bsal" style="flex:1">🏁 Salida ahora</button>
+                    </div>
+                </div>
+
+                <!-- Formulario 2: Novedades Laborales (Descanso, Ausencia, Incapacidad) -->
+                <div id="panelFormNovedad" style="display:none">
+                    <div class="form-grid">
+                        <div>
+                            <label for="jn_f1" id="lblFechaInicio">Fecha inicial</label>
+                            <input type="date" id="jn_f1">
+                        </div>
+                        <div>
+                            <label for="jn_f2">Hasta fecha (opcional, para varios días)</label>
+                            <input type="date" id="jn_f2">
+                        </div>
+                    </div>
+
+                    <!-- Configuración específica de Incapacidad Médica -->
+                    <div id="seccionIncapacidad" style="display:none; background:var(--card-muted); padding:10px; border-radius:8px; margin:8px 0; border:1px solid var(--bd)">
+                        <label for="incTipo" style="font-weight:600; font-size:12.5px; display:block; margin-bottom:4px">Liquidación de la Incapacidad:</label>
+                        <select id="incTipo" style="width:100%; margin-bottom:8px">
+                            <option value="66.67">Enfermedad General (EPS - 66.67% legal, piso de 1 SMMLV)</option>
+                            <option value="100">Incapacidad 100% (Accidente de trabajo / ARL o empresa)</option>
+                        </select>
+                        <label class="chk-container" style="margin:2px 0; font-size:12.5px">
+                            <input type="checkbox" id="incDescAux" checked>
+                            <span>Descontar auxilio de transporte diario por no desplazamiento (según ley)</span>
+                        </label>
+                    </div>
+
+                    <!-- Configuración específica de Ausencia no remunerada -->
+                    <div id="seccionAusencia" style="display:none; background:var(--card-muted); padding:10px; border-radius:8px; margin:8px 0; border:1px solid var(--bd)">
+                        <label class="chk-container" style="margin:2px 0 6px 0; font-size:12.5px">
+                            <input type="checkbox" id="ausDescSal" checked>
+                            <span>Descontar día(s) de salario básico (salario ÷ 30 por día ausente)</span>
+                        </label>
+                        <label class="chk-container" style="margin:2px 0; font-size:12.5px">
+                            <input type="checkbox" id="ausDescAux" checked>
+                            <span>Descontar auxilio de transporte proporcional por no desplazamiento</span>
+                        </label>
+                    </div>
+
+                    <!-- Motivo o detalle de la novedad -->
+                    <div style="margin:8px 0">
+                        <label for="jn_nota" id="lblNotaNovedad">Motivo o detalle opcional:</label>
+                        <input type="text" id="jn_nota" placeholder="Ej. Permiso, Certificado EPS, Descanso semanal...">
+                    </div>
+                </div>
+
+                <p style="font-size:12px; color:var(--tx-muted); margin:6px 0" id="ayudaFestivoTexto">
+                    Domingos y festivos oficiales de Colombia se detectan automáticamente.
+                </p>
+
+                <!-- Previsualización en vivo del turno o novedad -->
+                <div id="livePreview" style="background:var(--card-muted); border-radius:8px; padding:10px; margin:10px 0; font-size:12.5px; color:var(--tx-muted); display:none">
+                    <div style="font-weight:600; color:var(--tx)" id="previewTitle">Resumen</div>
+                    <div id="previewDetails">...</div>
+                </div>
+
+                <button type="button" class="btn btn-primary" id="jadd">
+                    💾 Guardar Turno
+                </button>
+                <div id="jmsg" style="font-size:12px; color:var(--tx-muted); margin-top:8px; text-align:center"></div>
+            </div>
+
+            <details class="card" id="detalleJornadas">
+                <summary class="card-title">
+                    <span>Detalle día por día</span>
+                    <span id="jornadasCount" class="badge badge-ok"></span>
+                </summary>
+                <div id="jlist"></div>
+            </details>
+        </section>
+
+        <!-- ================= PESTAÑA 3: HORAS & HISTORIAL ================= -->
+        <section id="view-horas" class="view-section">
+            <div class="card">
+                <div class="card-title">
+                    <span>Recargos acumulados de la quincena</span>
+                    <span class="badge badge-ok">Automático</span>
+                </div>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                    Calculados a partir de los turnos registrados en <strong id="recPeriodo">1–15 de octubre</strong>.
+                    Se cobran el <strong id="recCobro">30 de octubre</strong>.
+                </p>
+                <div class="form-grid" id="recAuto"></div>
+                <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:700; padding-top:10px; border-top:1px solid var(--bd)">
+                    <span>Total recargos</span>
+                    <span id="recTotal">$0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span>Horas Extra Manuales (opcional)</span>
+                </div>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                    Úsalas solo si tu empresa te reportó horas extra adicionales por fuera de los turnos registrados.
+                </p>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                    Estas horas son de la quincena <strong id="horasPeriodo"></strong> y se cobran el <strong id="horasCobro"></strong>.
+                    Escríbelas y toca <strong>Guardar</strong> (o presiona Enter).
+                </p>
+                <div class="form-grid" id="horas"></div>
+                <div class="btn-row" style="margin-top:12px">
+                    <button type="button" class="btn btn-primary" id="btnGuardarHoras" style="flex:1">💾 Guardar horas extra</button>
+                </div>
+                <div id="estadoHoras" class="estado-horas" role="status" aria-live="polite"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span>Historial de Períodos Guardados</span>
+                </div>
+                <div id="hist"></div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 4: AJUSTES & RESPALDO ================= -->
+        <section id="view-ajustes" class="view-section active">
+            <div class="card">
+                <div class="card-title">Parámetros Salariales</div>
+                <div class="form-grid">
+                    <div>
+                        <label for="salario">Salario Mensual ($)</label>
+                        <input type="text" id="salario" inputmode="numeric">
+                    </div>
+                    <div>
+                        <label for="bono">Bonificación ocasional de este pago ($)</label>
+                        <input type="text" id="bono" inputmode="numeric">
+                    </div>
+                    <div>
+                        <label for="otras">Otras deducciones de este pago ($)</label>
+                        <input type="text" id="otras" inputmode="numeric" value="0">
+                    </div>
+                    <div>
+                        <label for="divisorHoras">Jornada laboral semanal</label>
+                        <select id="divisorHoras">
+                            <option value="210">42 horas semanales (Divisor 210) · Ley 2101 (2026)</option>
+                            <option value="220">44 horas semanales (Divisor 220) · 2025</option>
+                            <option value="230">46 horas semanales (Divisor 230) · 2024</option>
+                            <option value="240">48 horas semanales (Divisor 240) · Anterior</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p style="font-size:12px; color:var(--tx-muted)">
+                    La bonificación y las otras deducciones aplican solo al pago seleccionado. El auxilio de transporte
+                    se aplica automáticamente cuando el salario es de hasta 2 SMMLV.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Configuración de Jornada y Turnos</div>
+                <div class="form-grid">
+                    <div>
+                        <label for="turno">Duración del turno ordinario (h)</label>
+                        <input type="text" id="turno" inputmode="decimal">
+                    </div>
+                    <div>
+                        <label for="desc">Descanso descontado de recargo (min)</label>
+                        <input type="text" id="desc" inputmode="numeric">
+                    </div>
+                    <div style="grid-column: span 2">
+                        <label for="noc">Inicio de la jornada nocturna (hora)</label>
+                        <div style="display:flex; gap:8px">
+                            <input type="text" id="noc" inputmode="numeric" style="flex:1">
+                            <button type="button" class="btn btn-secondary" id="btnNoc19" style="font-size:12px">Fijar
+                                19:00 (7 PM)</button>
+                            <button type="button" class="btn btn-secondary" id="btnNoc20" style="font-size:12px">Fijar
+                                20:00 (8 PM)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sincronización entre Dispositivos -->
+            <div class="card" id="cardSincronizacion">
+                <div class="card-title">
+                    <span>Sincronización entre Dispositivos</span>
+                    <span class="badge badge-ok">Móvil &amp; PC</span>
+                </div>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:14px">
+                    Mantén tus turnos y parámetros salariales idénticos en tu celular y en tu computadora usando cualquiera de estas opciones:
+                </p>
+
+                <!-- Pestañas de métodos de sincronización -->
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:14px">
+                    <button type="button" class="btn btn-secondary sync-tab-btn active" data-tab="sync-codigo" style="font-size:12px; padding:8px 4px">📋 Por Código</button>
+                    <button type="button" class="btn btn-secondary sync-tab-btn" data-tab="sync-qr" style="font-size:12px; padding:8px 4px">📱 Código QR</button>
+                    <button type="button" class="btn btn-secondary sync-tab-btn" data-tab="sync-nube" style="font-size:12px; padding:8px 4px">☁️ Nube Privada</button>
+                </div>
+
+                <!-- Método 1: Código de Texto (Portapapeles / WhatsApp) -->
+                <div id="sync-codigo" class="sync-panel">
+                    <p style="font-size:12px; color:var(--tx-muted); margin-bottom:10px">
+                        Copia este código o envíatelo directamente por WhatsApp. En tu otro dispositivo, pégalo en la casilla de abajo para sincronizar al instante.
+                    </p>
+                    <div class="btn-row" style="gap:8px; margin-bottom:10px">
+                        <button type="button" class="btn btn-primary" id="btnCopiarCodigoSync" style="flex:1">
+                            📋 Copiar Código
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btnCompartirSync" style="flex:1; background:#075e54; color:#ffffff; border-color:#075e54">
+                            📲 Enviar por WhatsApp
+                        </button>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
+                            <label for="inputCodigoSync" style="margin-bottom:0">O pega aquí el código recibido:</label>
+                            <button type="button" id="btnPegarClipSync" class="btn btn-secondary" style="font-size:11px; padding:2px 8px; border-radius:6px">
+                                📋 Pegar del portapapeles
+                            </button>
+                        </div>
+                        <textarea id="inputCodigoSync" rows="3" style="width:100%; font-family:monospace; font-size:11px; padding:8px; border-radius:8px; background:var(--card-muted); border:1px solid var(--bd); color:var(--tx); resize:vertical" placeholder="Pega aquí el código de sincronización recibido..."></textarea>
+                        <button type="button" class="btn btn-primary" id="btnPegarCodigoSync" style="width:100%; margin-top:8px">
+                            📥 Sincronizar desde este código
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Método 2: Código QR (PC <-> Celular) -->
+                <div id="sync-qr" class="sync-panel" style="display:none">
+                    <p style="font-size:12px; color:var(--tx-muted); margin-bottom:10px">
+                        Muestra un código QR en la pantalla de tu computadora y escanéalo con la cámara de tu celular para transferir tus datos sin cables.
+                    </p>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-primary" id="btnGenerarQR" style="flex:1">
+                            📲 Mostrar Código QR
+                        </button>
+                    </div>
+                    <p style="font-size:11.5px; color:var(--tx-muted); margin-top:8px">
+                        💡 <em>Tip:</em> Tu celular abrirá la aplicación directamente y te preguntará si deseas aplicar los datos transferidos.
+                    </p>
+                </div>
+
+                <!-- Método 3: Nube Privada (GitHub Gist) -->
+                <div id="sync-nube" class="sync-panel" style="display:none">
+                    <p style="font-size:12px; color:var(--tx-muted); margin-bottom:10px">
+                        Conecta tu cuenta de GitHub para guardar una copia en un <strong>Gist Privado</strong> personal. 100% privado y seguro (nadie más tiene acceso).
+                    </p>
+                    <div class="form-grid">
+                        <div style="grid-column: span 2">
+                            <label for="gistToken">Personal Access Token de GitHub (permiso "gist")</label>
+                            <input type="password" id="gistToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                        </div>
+                        <div style="grid-column: span 2">
+                            <label for="gistId">ID del Gist (opcional, se crea solo si está vacío)</label>
+                            <input type="text" id="gistId" placeholder="Ej. a1b2c3d4e5f6...">
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-secondary" id="btnSubirNube" style="flex:1">
+                            ☁️ Subir a la Nube
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btnDescargarNube" style="flex:1">
+                            📥 Descargar de la Nube
+                        </button>
+                    </div>
+                    <label class="chk-container" style="margin-top:8px">
+                        <input type="checkbox" id="chkAutoSyncGist">
+                        <span>Sincronizar automáticamente en la nube al guardar turnos</span>
+                    </label>
+                    <p style="font-size:11.5px; color:var(--tx-muted); margin-top:6px">
+                        Puedes generar un token gratuito en <strong>github.com → Settings → Developer Settings → Personal Access Tokens</strong> seleccionando el permiso <code>gist</code>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Instalación y Acceso Directo -->
+            <div class="card" id="cardInstalacionApp">
+                <div class="card-title">
+                    <span>📲 Instalación y Acceso Directo</span>
+                    <span class="badge badge-ok">App Nativa / Offline</span>
+                </div>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                    Instala esta aplicación en tu celular o computadora para abrirla como una app nativa, con acceso directo rápido y funcionamiento 100% offline.
+                </p>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-primary" id="btnAbrirInstalarAjustes" style="flex:1">
+                        📲 Abrir Asistente de Instalación
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnDescargarAccesoDirectoAjustes" style="flex:1">
+                        🖥️ Descargar Acceso Directo (.url)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Respaldo y Datos -->
+            <div class="card">
+                <div class="card-title">Copia de Seguridad y Datos</div>
+                <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                    Tus datos se guardan únicamente en la memoria de este navegador. Exporta una copia periódicamente
+                    para no perderlos si borras el historial o cambias de celular.
+                </p>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-secondary" id="btnExportarJson" style="flex:1">
+                        📥 Exportar Copia (JSON)
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnImportarTrigger" style="flex:1">
+                        📤 Restaurar Copia (JSON)
+                    </button>
+                    <input type="file" id="importFileInput" accept=".json" style="display:none">
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-secondary" id="btnExportarCsv" style="width:100%">
+                        📊 Exportar Historial a Excel / CSV
+                    </button>
+                </div>
+
+                <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--bd)">
+                    <button type="button" class="btn btn-danger" id="btnBorrarTodo" style="width:100%; font-size:12px">
+                        ⚠️ Borrar todos los datos y reiniciar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Barra de navegación inferior -->
+    <nav class="tab-bar">
+        <div class="tab-bar-inner">
+            <button class="tab-btn" data-view="view-resumen">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+                Resumen
+            </button>
+            <button class="tab-btn" data-view="view-jornadas">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Turnos
+            </button>
+            <button class="tab-btn" data-view="view-horas">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Historial
+            </button>
+            <button class="tab-btn active" data-view="view-ajustes">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Ajustes
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal de confirmación -->
+    <div class="modal-backdrop" id="modalConfirm">
+        <div class="modal-card">
+            <div style="font-weight:700; font-size:16px; margin-bottom:8px" id="modalTitle">¿Estás seguro?</div>
+            <div style="font-size:13.5px; color:var(--tx-muted); margin-bottom:16px" id="modalText">Esta acción no se
+                puede deshacer.</div>
+            <div style="display:flex; gap:8px; justify-content:flex-end">
+                <button type="button" class="btn btn-secondary" id="modalCancel">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="modalOk">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Código QR -->
+    <div class="modal-backdrop" id="modalQR">
+        <div class="modal-card" style="text-align:center">
+            <div style="font-weight:700; font-size:16px; margin-bottom:6px">Sincronizar por Código QR</div>
+            <div id="modalQRDesc" style="font-size:13px; color:var(--tx-muted); margin-bottom:14px">
+                Apunta con la cámara de tu celular a este código para abrir la app y transferir tus datos.
+            </div>
+            <div id="qrSvgWrapper" style="display:flex; justify-content:center; margin-bottom:12px"></div>
+            <div style="display:flex; gap:8px; justify-content:center">
+                <button type="button" class="btn btn-secondary" id="btnCopiarLinkQR" style="font-size:12.5px">🔗 Copiar enlace directo</button>
+                <button type="button" class="btn btn-primary" id="modalQRCerrar" style="width:auto; padding:8px 18px">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Instalación y Acceso Directo -->
+    <div class="modal-backdrop" id="modalInstalar">
+        <div class="modal-card" style="max-width:480px; text-align:left">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+                <div style="font-weight:700; font-size:16px">📲 Instalar y Crear Acceso Directo</div>
+                <button type="button" class="btn-delete-icon" id="modalInstalarCerrarX" aria-label="Cerrar modal" style="color:var(--tx-muted)">✕</button>
+            </div>
+            
+            <p style="font-size:12.5px; color:var(--tx-muted); margin-bottom:12px">
+                Usa <strong>Mis Ingresos</strong> como una aplicación nativa en tu dispositivo, sin conexión a internet y accesible con un solo toque desde tu pantalla de inicio o escritorio.
+            </p>
+
+            <!-- Pestañas por dispositivo -->
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:14px">
+                <button type="button" class="btn btn-secondary inst-tab-btn active" data-inst-tab="inst-android" style="font-size:12px; padding:7px 2px">📱 Android</button>
+                <button type="button" class="btn btn-secondary inst-tab-btn" data-inst-tab="inst-ios" style="font-size:12px; padding:7px 2px">🍏 iPhone/iPad</button>
+                <button type="button" class="btn btn-secondary inst-tab-btn" data-inst-tab="inst-pc" style="font-size:12px; padding:7px 2px">💻 Computadora</button>
+            </div>
+
+            <!-- Panel Android -->
+            <div id="inst-android" class="inst-panel">
+                <div id="boxPwaNative" style="display:none; margin-bottom:12px; background:var(--primary-light); padding:10px; border-radius:8px; border:1px solid var(--bd-focus); text-align:center">
+                    <p style="font-size:12.5px; font-weight:600; color:var(--primary-text); margin-bottom:8px">¡Tu navegador permite instalación directa en 1 toque!</p>
+                    <button type="button" class="btn btn-primary" id="btnInstalarPwaDirecto">📲 Instalar aplicación ahora</button>
+                </div>
+                <ol style="font-size:12.5px; color:var(--tx); padding-left:18px; margin:0 0 12px 0; line-height:1.6">
+                    <li>Toca el botón de opciones <strong>(⋮ tres puntos)</strong> en la esquina superior de Chrome o tu navegador.</li>
+                    <li>Selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</li>
+                    <li>Confirma pulsando <strong>"Instalar"</strong> o <strong>"Agregar"</strong>. Se creará el acceso directo con el icono oficial en tu pantalla.</li>
+                </ol>
+            </div>
+
+            <!-- Panel iOS -->
+            <div id="inst-ios" class="inst-panel" style="display:none">
+                <ol style="font-size:12.5px; color:var(--tx); padding-left:18px; margin:0 0 12px 0; line-height:1.6">
+                    <li>Abre esta página en el navegador <strong>Safari</strong> de tu iPhone o iPad.</li>
+                    <li>Toca el botón <strong>Compartir</strong> (icono de cuadrado con flecha hacia arriba <strong>⎋ / ⬆️</strong> en la barra inferior).</li>
+                    <li>Desplázate hacia abajo y selecciona <strong>"Agregar al inicio" (Add to Home Screen ➕)</strong>.</li>
+                    <li>Toca <strong>"Agregar"</strong> en la esquina superior derecha.</li>
+                </ol>
+            </div>
+
+            <!-- Panel Computadora (Windows / Mac) -->
+            <div id="inst-pc" class="inst-panel" style="display:none">
+                <div style="background:var(--card-muted); padding:12px; border-radius:8px; border:1px solid var(--bd); margin-bottom:12px">
+                    <div style="font-weight:600; font-size:13px; margin-bottom:4px">🖥️ Acceso Directo de Escritorio para Windows</div>
+                    <p style="font-size:12px; color:var(--tx-muted); margin-bottom:10px">
+                        Descarga el archivo de acceso directo oficial y colócalo en tu Escritorio para abrir la aplicación directamente:
+                    </p>
+                    <button type="button" class="btn btn-primary" id="btnDescargarAccesoDirectoModal" style="width:100%; font-size:13px">
+                        📥 Descargar Acceso Directo de Escritorio (.url)
+                    </button>
+                </div>
+                <div style="font-size:12.5px; line-height:1.5">
+                    <strong>Opción navegador (Chrome o Edge en PC/Mac):</strong>
+                    <ul style="padding-left:18px; margin:4px 0 0 0">
+                        <li>Haz clic en el icono <strong>⊕ (Instalar aplicación)</strong> a la derecha de la barra de direcciones.</li>
+                        <li>O ve a <strong>Menú (⋮) → Guardar y compartir → Instalar Mis Ingresos...</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:14px; padding-top:10px; border-top:1px solid var(--bd)">
+                <button type="button" class="btn btn-secondary" id="modalInstalarCerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast flotante de notificación -->
+    <div id="toast" role="status">Mensaje</div>
+
+    <!-- ================= LÓGICA JAVASCRIPT ================= -->
+    <script>
+        // ===== Robustez al abrir la app =====
+        // Aviso visible si algo falla (en vez de dejar la pantalla a medias)
+        function mostrarAviso(msg, detalle, tipo) {
+            let b = document.getElementById("avisoFallo");
+            if (!b) {
+                b = document.createElement("div");
+                b.id = "avisoFallo";
+                b.setAttribute("role", "alert");
+                document.body.insertBefore(b, document.body.firstChild);
+            }
+            b.className = tipo === "warn" ? "warn" : "";
+            b.textContent = "";
+            const t = document.createElement("div");
+            t.textContent = msg;
+            b.appendChild(t);
+            if (detalle) {
+                const d = document.createElement("small");
+                d.textContent = "Detalle: " + detalle;
+                b.appendChild(d);
+            }
+            const r = document.createElement("button");
+            r.type = "button";
+            r.textContent = "Recargar";
+            r.onclick = () => location.reload();
+            b.appendChild(r);
+        }
+        window.addEventListener("error", e => {
+            if (/ResizeObserver/.test(e.message || "")) return;
+            mostrarAviso("Algo falló al abrir o usar la app. Tus datos guardados no se borraron.", e.message || "error desconocido");
+        });
+        window.addEventListener("unhandledrejection", e => {
+            mostrarAviso("Algo falló al abrir o usar la app. Tus datos guardados no se borraron.", String((e.reason && e.reason.message) || e.reason));
+        });
+
+        // Almacenamiento seguro: si el navegador lo bloquea, la app sigue funcionando (sin guardar) y avisa
+        const LS = (() => {
+            try {
+                const t = window.localStorage;
+                t.setItem("__prueba", "1");
+                t.removeItem("__prueba");
+                return t;
+            } catch (_) {
+                window.__sinAlmacenamiento = true;
+                const m = {};
+                return {
+                    getItem: k => (Object.prototype.hasOwnProperty.call(m, k) ? m[k] : null),
+                    setItem: (k, v) => { m[k] = String(v); },
+                    removeItem: k => { delete m[k]; }
+                };
+            }
+        })();
+        // Parámetros legales Colombia 2026
+        const SMMLV = 1750905;
+        const AUX = 249095;
+        const DOM = 0.9; // 90% desde el 1-jul-2026 (Ley 2466 de 2025)
+        const VER = 5; // versión del esquema de datos guardados
+        const MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+        const TIPOS = [
+            ["he_diurna", "Extra diurna (+25%)", 0.25, 1],
+            ["he_nocturna", "Extra nocturna (+75%)", 0.75, 1],
+            ["he_diurna_fest", "Extra diurna festiva (+115%)", 0.25 + DOM, 1],
+            ["he_nocturna_fest", "Extra nocturna festiva (+165%)", 0.75 + DOM, 1],
+            ["rec_nocturno", "Recargo nocturno (+35%)", 0.35, 0],
+            ["rec_festivo", "Recargo dominical/festivo (+90%)", DOM, 0],
+            ["rec_noct_fest", "Recargo nocturno festivo (+125%)", 0.35 + DOM, 0]
+        ];
+
+        const EXT = TIPOS.filter(t => t[3]); // horas extra (manuales opcionales)
+        const REC = TIPOS.filter(t => !t[3]); // recargos (automáticos desde los turnos)
+
+        // Color de cada casilla = color de su tramo en la barra de devengado
+        // (la barra agrupa horas extra y recargos en el mismo tramo verde)
+        const COLOR_BTN = { base: "c-salario", extra: "c-extras", recargo: "c-extras", aux: "c-aux", ded: "c-ded" };
+        const claseBtn = k => "metric-btn" + (COLOR_BTN[k] ? " mc " + COLOR_BTN[k] : "");
+
+        const BTN = [
+            ["base", "Salario base"],
+            ["extra", "Horas extra"],
+            ["recargo", "Recargos"],
+            ["aux", "Auxilio transporte"],
+            ["ded", "Deducciones"],
+            ["hist", "Historial"]
+        ];
+
+        const $ = id => document.getElementById(id);
+
+        // Estado global de la aplicación
+        let sel = "base";
+        let M = "";
+        let Q = 1;
+        let R = {};
+        const CFG_DEF = { sal: SMMLV, turno: 9.15, desc: 30, noc: 20, div: 210, v: VER };
+        let S = { cfg: { ...CFG_DEF }, q: {} };
+        let bonoLegado = 0; // bonificación fija de versiones anteriores (se migra al período actual)
+
+        // Formateadores y utilidades
+        const cop = v => (v < 0 ? "-$" : "$") + Math.abs(Math.round(v)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        const fmtPct = v => (v * 100).toLocaleString("es-CO", { maximumFractionDigits: 1 }) + "%";
+        const monto = t => {
+            const d = String(t).replace(/\D/g, "");
+            return d ? Number(d) : 0;
+        };
+        const hrs = t => {
+            const n = parseFloat(String(t).replace(",", "."));
+            return n > 0 ? n : 0;
+        };
+        const rd = v => Math.round(v * 100) / 100;
+        const p2 = n => String(n).padStart(2, "0");
+        const hm = d => p2(d.getHours()) + ":" + p2(d.getMinutes());
+
+        const ym = m => m.split("-").map(Number);
+        const mover = (m, d) => {
+            let [y, n] = ym(m);
+            n += d;
+            if (n < 1) { n = 12; y--; }
+            if (n > 12) { n = 1; y++; }
+            return y + "-" + p2(n);
+        };
+        const prev = (m, q) => (q === 2 ? [m, 1] : [mover(m, -1), 2]);
+        const sig = (m, q) => (q === 1 ? [m, 2] : [mover(m, 1), 1]);
+        const ult = (y, n) => (n === 2 ? new Date(y, 2, 0).getDate() : 30);
+        const etiq = (m, q) => {
+            const n = ym(m)[1];
+            return q === 1 ? "1–15 de " + MES[n - 1] : "16 a fin de " + MES[n - 1];
+        };
+        const fecha = (m, q) => {
+            const [y, n] = ym(m);
+            return (q === 1 ? 15 : ult(y, n)) + " de " + MES[n - 1];
+        };
+        const K = (m, q) => m + "-" + q;
+        const clave = f => K(f.slice(0, 7), Number(f.slice(8)) <= 15 ? 1 : 2); // quincena a la que pertenece una fecha
+
+        // Escapa texto antes de insertarlo como HTML
+        const esc = v => String(v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+        // -------------------------------------------------------------
+        // VALIDACIÓN Y SANEAMIENTO DE DATOS (localStorage y respaldos)
+        // -------------------------------------------------------------
+        const RX_FECHA = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+        const RX_HORA = /^([01]\d|2[0-3]):[0-5]\d$/;
+        const RX_CLAVE = /^\d{4}-(0[1-9]|1[0-2])-[12]$/;
+        const DIVISORES = [210, 220, 230, 240];
+        const MAX_PESOS = 1e9;
+        const MAX_HORAS = 400;
+
+        const num = (v, min, max, def) => {
+            const n = typeof v === "string" ? Number(v.replace(",", ".")) : Number(v);
+            return Number.isFinite(n) && n >= min && n <= max ? n : def;
+        };
+
+        function fechaValida(f) {
+            if (typeof f !== "string" || !RX_FECHA.test(f)) return false;
+            const [y, m, d] = f.split("-").map(Number);
+            const dt = new Date(y, m - 1, d);
+            return y >= 2000 && y <= 2100 && dt.getMonth() === m - 1 && dt.getDate() === d;
+        }
+
+        function sanearCfg(c) {
+            c = c && typeof c === "object" ? c : {};
+            return {
+                sal: Math.round(num(c.sal, 0, MAX_PESOS, CFG_DEF.sal)),
+                turno: num(c.turno, 1, 16, CFG_DEF.turno),
+                desc: Math.round(num(c.desc, 0, 240, CFG_DEF.desc)),
+                noc: num(c.noc, 18, 22, CFG_DEF.noc),
+                div: DIVISORES.includes(Number(c.div)) ? Number(c.div) : CFG_DEF.div,
+                v: VER
+            };
+        }
+
+        const periodoVacio = r => !r || (!(r.dias && r.dias.length) && !r.otras && !r.bono
+            && !Object.values(r.h || {}).some(v => v > 0));
+
+        // Valida y normaliza datos externos. Devuelve { S, bonoLegado, omitidos } o null si la estructura no es válida.
+        function sanear(raw) {
+            if (!raw || typeof raw !== "object" || !raw.cfg || typeof raw.cfg !== "object"
+                || !raw.q || typeof raw.q !== "object" || Array.isArray(raw.q)) return null;
+
+            const q = {};
+            let omitidos = 0;
+            const reg = k => q[k] || (q[k] = { h: {}, otras: 0, bono: 0, dias: [] });
+
+            Object.keys(raw.q).forEach(k => {
+                const r = raw.q[k];
+                if (!RX_CLAVE.test(k) || !r || typeof r !== "object") { omitidos++; return; }
+                const p = reg(k);
+                if (r.h && typeof r.h === "object") {
+                    TIPOS.forEach(t => {
+                        const n = num(r.h[t[0]], 0, MAX_HORAS, 0);
+                        if (n > 0) p.h[t[0]] = n;
+                    });
+                }
+                p.otras = Math.round(num(r.otras, 0, MAX_PESOS, 0));
+                p.bono = Math.round(num(r.bono, 0, MAX_PESOS, 0));
+                (Array.isArray(r.dias) ? r.dias : []).forEach(d => {
+                    if (!d || typeof d !== "object" || !fechaValida(d.f)) { omitidos++; return; }
+                    const tipo = d.tipo || "turno";
+                    const destino = reg(clave(d.f));
+                    destino.dias = destino.dias.filter(x => x.f !== d.f);
+                    if (tipo === "turno") {
+                        if (!RX_HORA.test(d.e) || !RX_HORA.test(d.s) || d.e === d.s) { omitidos++; return; }
+                        destino.dias.push({ f: d.f, tipo: "turno", e: d.e, s: d.s });
+                    } else if (tipo === "descanso") {
+                        destino.dias.push({ f: d.f, tipo: "descanso", nota: typeof d.nota === "string" ? d.nota.slice(0, 100) : "" });
+                    } else if (tipo === "ausencia") {
+                        destino.dias.push({
+                            f: d.f,
+                            tipo: "ausencia",
+                            nota: typeof d.nota === "string" ? d.nota.slice(0, 100) : "",
+                            descSal: d.descSal !== false,
+                            descAux: d.descAux !== false
+                        });
+                    } else if (tipo === "incapacidad") {
+                        const pct = d.pct === 100 || d.pct === "100" ? 100 : 66.67;
+                        destino.dias.push({
+                            f: d.f,
+                            tipo: "incapacidad",
+                            pct,
+                            subtipo: d.subtipo === "laboral" ? "laboral" : "general",
+                            nota: typeof d.nota === "string" ? d.nota.slice(0, 100) : "",
+                            descAux: d.descAux !== false
+                        });
+                    }
+                });
+            });
+
+            Object.keys(q).forEach(k => {
+                q[k].dias.sort((a, b) => (a.f < b.f ? -1 : 1));
+                if (periodoVacio(q[k])) delete q[k];
+            });
+
+            const vAnt = Number(raw.cfg.v) || 0;
+            return {
+                S: { cfg: sanearCfg(raw.cfg), q },
+                bonoLegado: vAnt < 5 ? Math.round(num(raw.cfg.bono, 0, MAX_PESOS, 0)) : 0,
+                omitidos
+            };
+        }
+
+        // La bonificación antes era fija en la configuración; ahora es ocasional por pago
+        function migrarBono(b) {
+            if (!(b > 0)) return;
+            const k = K(M, Q);
+            const r = S.q[k] || (S.q[k] = { h: {}, otras: 0, bono: 0, dias: [] });
+            if (!r.bono) r.bono = b;
+        }
+
+        // Toast flotante
+        let toastTimer;
+        function mostrarToast(msg) {
+            const t = $("toast");
+            t.textContent = msg;
+            t.classList.add("show");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+        }
+
+        // Modal de confirmación genérico
+        let onConfirmModal = null;
+        function pedirConfirmacion(titulo, texto, accion, textoOk = "Eliminar") {
+            $("modalTitle").textContent = titulo;
+            $("modalText").textContent = texto;
+            $("modalOk").textContent = textoOk;
+            onConfirmModal = accion;
+            $("modalConfirm").classList.add("open");
+        }
+        $("modalCancel").onclick = () => $("modalConfirm").classList.remove("open");
+        $("modalOk").onclick = () => {
+            $("modalConfirm").classList.remove("open");
+            if (onConfirmModal) onConfirmModal();
+        };
+
+        // -------------------------------------------------------------
+        // ALGORITMO OFICIAL DE FESTIVOS DE COLOMBIA (Ley Emiliani)
+        // -------------------------------------------------------------
+        function getEaster(year) {
+            const a = year % 19;
+            const b = Math.floor(year / 100);
+            const c = year % 100;
+            const d = Math.floor(b / 4);
+            const e = b % 4;
+            const f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3);
+            const h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4);
+            const k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const month = Math.floor((h + l - 7 * m + 114) / 31);
+            const day = ((h + l - 7 * m + 114) % 31) + 1;
+            return new Date(year, month - 1, day);
+        }
+
+        function nextMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            if (day === 1) return d;
+            const diff = day === 0 ? 1 : (8 - day);
+            d.setDate(d.getDate() + diff);
+            return d;
+        }
+
+        function addDays(date, days) {
+            const d = new Date(date);
+            d.setDate(d.getDate() + days);
+            return d;
+        }
+
+        const festiveCache = {};
+        function getFestivosColombia(year) {
+            if (festiveCache[year]) return festiveCache[year];
+            const h = {};
+            const add = (d, name) => {
+                const key = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+                h[key] = name;
+            };
+
+            // Fijos
+            add(new Date(year, 0, 1), "Año Nuevo");
+            add(new Date(year, 4, 1), "Día del Trabajo");
+            add(new Date(year, 6, 20), "Día de la Independencia");
+            add(new Date(year, 7, 7), "Batalla de Boyacá");
+            add(new Date(year, 11, 8), "Inmaculada Concepción");
+            add(new Date(year, 11, 25), "Navidad");
+
+            // Ley Emiliani (trasladables al siguiente lunes)
+            add(nextMonday(new Date(year, 0, 6)), "Reyes Magos");
+            add(nextMonday(new Date(year, 2, 19)), "Día de San José");
+            add(nextMonday(new Date(year, 5, 29)), "San Pedro y San Pablo");
+            add(nextMonday(new Date(year, 7, 15)), "Asunción de la Virgen");
+            add(nextMonday(new Date(year, 9, 12)), "Día de la Raza");
+            add(nextMonday(new Date(year, 10, 1)), "Todos los Santos");
+            add(nextMonday(new Date(year, 10, 11)), "Independencia de Cartagena");
+
+            // Pascua y móviles
+            const easter = getEaster(year);
+            add(addDays(easter, -3), "Jueves Santo");
+            add(addDays(easter, -2), "Viernes Santo");
+            add(nextMonday(addDays(easter, 40)), "Ascensión del Señor");
+            add(nextMonday(addDays(easter, 60)), "Corpus Christi");
+            add(nextMonday(addDays(easter, 68)), "Sagrado Corazón de Jesús");
+
+            festiveCache[year] = h;
+            return h;
+        }
+
+        function esFestivoColombia(dateStr) {
+            if (!dateStr) return null;
+            const y = parseInt(dateStr.slice(0, 4), 10);
+            const holidays = getFestivosColombia(y);
+            return holidays[dateStr] || null;
+        }
+
+        // -------------------------------------------------------------
+        // CÁLCULO LABORAL Y CLASIFICACIÓN DE TURNOS
+        // -------------------------------------------------------------
+        function divisorActual() {
+            return Number(S.cfg.div) || 210;
+        }
+
+        function ev(sal, h) {
+            const vh = sal / divisorActual();
+            let ex = 0, rc = 0, de = [], dr = [];
+            TIPOS.forEach(t => {
+                const n = h[t[0]] || 0;
+                if (n <= 0) return;
+                if (t[3]) {
+                    const v = n * vh * (1 + t[2]);
+                    ex += v;
+                    de.push([t[1], n, v]);
+                } else {
+                    const v = n * vh * t[2];
+                    rc += v;
+                    dr.push([t[1], n, v]);
+                }
+            });
+            return { vh, ex, rc, de, dr };
+        }
+
+        // Fondo de Solidaridad Pensional según IBC mensual (Ley 100/1993 art. 27, modificado por Ley 797/2003 art. 8)
+        function tasaFSP(ibcMes) {
+            const n = ibcMes / SMMLV;
+            if (n < 4) return 0;
+            if (n < 16) return 0.01;
+            if (n < 17) return 0.012;
+            if (n < 18) return 0.014;
+            if (n < 19) return 0.016;
+            if (n < 20) return 0.018;
+            return 0.02;
+        }
+
+        // Cálculo de ajustes por novedades (Descansos, Ausencias e Incapacidades)
+        function calcularAjustesNovedades(m, q) {
+            const r = S.q[K(m, q)];
+            const ds = (r && r.dias) || [];
+            const sal = S.cfg.sal;
+            const vDia = sal / 30; // valor diario de salario ordinario
+            const vDiaMin = SMMLV / 30; // piso constitucional de 1 SMMLV diario
+            const vDiaAux = AUX / 30; // valor diario de auxilio de transporte
+
+            let nTurnos = 0;
+            let nDescansos = 0;
+            let nAusencias = 0;
+            let nIncapacidades = 0;
+            let descSalAusencia = 0;
+            let descAuxAusencia = 0;
+            let descSalIncapacidad = 0;
+            let pagoIncapacidad = 0;
+            let descAuxIncapacidad = 0;
+
+            ds.forEach(d => {
+                const tipo = d.tipo || "turno";
+                if (tipo === "turno") {
+                    nTurnos++;
+                } else if (tipo === "descanso") {
+                    nDescansos++;
+                } else if (tipo === "ausencia") {
+                    nAusencias++;
+                    if (d.descSal !== false) descSalAusencia += vDia;
+                    if (d.descAux !== false) descAuxAusencia += vDiaAux;
+                } else if (tipo === "incapacidad") {
+                    nIncapacidades++;
+                    const pct = Number(d.pct) || 66.67;
+                    let vDiaInc = 0;
+                    if (pct >= 100) {
+                        vDiaInc = vDia;
+                    } else {
+                        // 66.67% con piso de SMMLV diario (no puede ser inferior al mínimo legal ni mayor al salario real)
+                        vDiaInc = Math.max(vDia * (pct / 100), Math.min(vDia, vDiaMin));
+                    }
+                    pagoIncapacidad += vDiaInc;
+                    // El ajuste en salario base es la diferencia no remunerada
+                    const ajusteInc = Math.max(0, vDia - vDiaInc);
+                    descSalIncapacidad += ajusteInc;
+
+                    if (d.descAux !== false) descAuxIncapacidad += vDiaAux;
+                }
+            });
+
+            return {
+                nTurnos,
+                nDescansos,
+                nAusencias,
+                nIncapacidades,
+                vDia,
+                vDiaMin,
+                vDiaAux,
+                descSalAusencia: Math.round(descSalAusencia),
+                descAuxAusencia: Math.round(descAuxAusencia),
+                descSalIncapacidad: Math.round(descSalIncapacidad),
+                pagoIncapacidad: Math.round(pagoIncapacidad),
+                descAuxIncapacidad: Math.round(descAuxIncapacidad),
+                totalDescSalario: Math.round(descSalAusencia + descSalIncapacidad),
+                totalDescAux: Math.round(descAuxAusencia + descAuxIncapacidad)
+            };
+        }
+
+        // Devengado salarial de un pago: salario quincenal ajustado por novedades + extras/recargos de la quincena anterior + bonificación del pago
+        function devengo(m, q) {
+            const sal = S.cfg.sal;
+            const pv = prev(m, q);
+            const e = ev(sal, tot(S.q[K(pv[0], pv[1])]));
+            const r = S.q[K(m, q)] || {};
+            const bono = r.bono || 0;
+            const aj = calcularAjustesNovedades(m, q);
+            const salNominal = sal / 2;
+            const salAjustado = Math.max(0, salNominal - aj.totalDescSalario);
+            return {
+                e,
+                bono,
+                aj,
+                otras: r.otras || 0,
+                salNominal,
+                salAjustado,
+                base: salAjustado + e.ex + e.rc + bono
+            };
+        }
+
+        // Liquidación completa del pago (m, q)
+        function liquidar(m, q) {
+            const sal = S.cfg.sal;
+            const d = devengo(m, q);
+            const ibcMes = devengo(m, 1).base + devengo(m, 2).base; // IBC del mes = ambos pagos del mes
+            const tfsp = tasaFSP(ibcMes);
+            const ap = sal <= 2 * SMMLV;
+            const axNominal = ap ? Math.round(AUX / 2) : 0;
+            const ax = ap ? Math.max(0, axNominal - d.aj.totalDescAux) : 0;
+            const sa = Math.floor(d.base * 0.04);
+            const pe = Math.floor(d.base * 0.04);
+            const so = Math.floor(d.base * tfsp);
+            const ded = sa + pe + so + d.otras;
+            return {
+                e: d.e,
+                base: d.base,
+                salNominal: d.salNominal,
+                salAjustado: d.salAjustado,
+                aj: d.aj,
+                bono: d.bono,
+                ax,
+                axNominal,
+                ap,
+                sa,
+                pe,
+                so,
+                tfsp,
+                ibcMes,
+                otras: d.otras,
+                ded,
+                neto: d.base + ax - ded
+            };
+        }
+
+        function clasif(d) {
+            if (!d || (d.tipo && d.tipo !== "turno")) return { h: {}, total: 0 };
+            if (!d.e || !d.s || d.e === d.s) return { h: {}, total: 0 };
+            const [y, mo, da] = d.f.split("-").map(Number);
+            const [eh, em] = d.e.split(":").map(Number);
+            const [sh, sm] = d.s.split(":").map(Number);
+            let a = eh * 60 + em;
+            let b = sh * 60 + sm;
+            if (b <= a) b += 1440; // cruce de medianoche
+
+            const h = {};
+            const NS = (S.cfg.noc > 0 ? S.cfg.noc : 20) * 60;
+            const TM = (S.cfg.turno > 0 ? S.cfg.turno : 9.15) * 60;
+            let n = 0, od = 0;
+
+            for (let t = a; t < b; t++) {
+                const diaExtra = Math.floor(t / 1440);
+                const mm = t % 1440;
+                const curDate = new Date(y, mo - 1, da + diaExtra);
+                const curDateStr = curDate.getFullYear() + "-" + p2(curDate.getMonth() + 1) + "-" + p2(curDate.getDate());
+
+                // Es festivo si es domingo o festivo oficial de Colombia (detección automática)
+                const esDom = curDate.getDay() === 0;
+                const esFestivoAuto = Boolean(esFestivoColombia(curDateStr));
+                const fe = esDom || esFestivoAuto;
+
+                const no = mm >= NS || mm < 360; // 360 min = 6:00 a.m.
+                const ex = n >= TM;
+                n++;
+
+                const k = ex
+                    ? (no ? (fe ? "he_nocturna_fest" : "he_nocturna") : (fe ? "he_diurna_fest" : "he_diurna"))
+                    : (no ? (fe ? "rec_noct_fest" : "rec_nocturno") : (fe ? "rec_festivo" : null));
+
+                if (k) h[k] = (h[k] || 0) + 1 / 60;
+                else od += 1 / 60;
+            }
+
+            let r = (S.cfg.desc >= 0 ? S.cfg.desc : 30) / 60;
+            r -= Math.min(od, r);
+            ["rec_nocturno", "rec_festivo", "rec_noct_fest"].forEach(k => {
+                if (r > 1e-9 && h[k]) {
+                    const z = Math.min(h[k], r);
+                    h[k] -= z;
+                    r -= z;
+                }
+            });
+
+            return { h, total: (b - a) / 60 };
+        }
+
+        const tot = r => {
+            const o = { ...((r && r.h) || {}) };
+            ((r && r.dias) || []).forEach(d => {
+                const c = clasif(d).h;
+                for (const k in c) o[k] = (o[k] || 0) + c[k];
+            });
+            return o;
+        };
+
+        // -------------------------------------------------------------
+        // PERSISTENCIA Y ACTUALIZACIÓN DE UI
+        // -------------------------------------------------------------
+        function leer() {
+            let txt = null;
+            try {
+                txt = LS.getItem("ingresos_q");
+                if (!txt) return;
+                const res = sanear(JSON.parse(txt));
+                if (!res) throw new Error("estructura no válida");
+                S = res.S;
+                bonoLegado = res.bonoLegado;
+                if (res.omitidos) console.warn("Registros no válidos omitidos:", res.omitidos);
+            } catch (e) {
+                console.error("Error al leer localStorage", e);
+                // Conserva una copia de los datos dañados para no perderlos al volver a guardar
+                try { if (txt) LS.setItem("ingresos_q_respaldo_danado", txt); } catch (_) { }
+                mostrarToast("Datos guardados dañados: se conservó una copia interna");
+            }
+        }
+
+        function guardar(silent = false) {
+            try {
+                LS.setItem("ingresos_q", JSON.stringify(S));
+                if (M) LS.setItem("ultimo_M", M);
+                if (Q) LS.setItem("ultimo_Q", String(Q));
+                if (!silent) mostrarToast("Guardado en este dispositivo");
+                autoSyncCheck();
+                return true;
+            } catch (e) {
+                mostrarToast("No se pudo guardar en el navegador");
+                return false;
+            }
+        }
+
+        // Solo las horas extra son manuales; los recargos se calculan desde los turnos
+        function horasAct() {
+            const h = {};
+            EXT.forEach(t => {
+                const n = num($("h_" + t[0]).value, 0, MAX_HORAS, 0);
+                if (n > 0) h[t[0]] = n;
+            });
+            return h;
+        }
+
+        function lin(a, v) {
+            return a.length
+                ? a.map(x => "• " + x[0] + ": " + rd(x[1]) + " h → " + cop(x[2])).join("\n")
+                : v;
+        }
+
+        function pintar() {
+            const sal = S.cfg.sal;
+            const pv = prev(M, Q);
+
+            R = liquidar(M, Q);
+
+            $("cap-fecha").textContent = "Pago del " + fecha(M, Q);
+            $("neto").textContent = cop(R.neto);
+
+            const e2 = ev(sal, tot(S.q[K(M, Q)]));
+            const sg = sig(M, Q);
+            $("prox").textContent = "Por cobrar el " + fecha(sg[0], sg[1]) + " (horas de esta quincena): " + cop(e2.ex + e2.rc);
+
+            $("q1").className = Q === 1 ? "on" : "";
+            $("q2").className = Q === 2 ? "on" : "";
+
+            // Barra de progreso y proporción
+            const totalDevengado = R.base + R.ax;
+            $("prog-base").textContent = "Devengado: " + cop(totalDevengado);
+            $("prog-ded").textContent = "Deducciones: " + cop(R.ded);
+
+            // Proporción sobre devengado + deducciones para que las barras sumen 100 %
+            const totalBarra = totalDevengado + R.ded;
+            const pct = v => (totalBarra > 0 ? (v / totalBarra * 100).toFixed(2) : 0) + "%";
+            $("bar-salario").style.width = pct(R.salAjustado + R.bono);
+            $("bar-extras").style.width = pct(R.e.ex + R.e.rc);
+            $("bar-aux").style.width = pct(R.ax);
+            $("bar-ded").style.width = pct(R.ded);
+
+            // Botones de métricas
+            const v = {
+                base: cop(R.salAjustado),
+                extra: cop(R.e.ex),
+                recargo: cop(R.e.rc),
+                aux: cop(R.ax),
+                ded: cop(-R.ded),
+                hist: "Ver histórico"
+            };
+
+            BTN.forEach(b => {
+                const el = $("b_" + b[0]);
+                if (el) {
+                    let label = b[1];
+                    if (b[0] === "base" && R.aj && R.aj.totalDescSalario > 0) label = "Salario (ajustado)";
+                    if (b[0] === "aux" && R.aj && R.aj.totalDescAux > 0) label = "Auxilio (ajustado)";
+                    el.querySelector(".metric-label").textContent = label;
+                    el.querySelector(".metric-val").textContent = v[b[0]];
+                    el.className = claseBtn(b[0]) + (sel === b[0] ? " active" : "");
+                }
+            });
+
+            // Texto explicativo del detalle
+            const pl = etiq(pv[0], pv[1]);
+            let t, x;
+
+            if (sel === "base") {
+                t = "Salario quincenal ordinario";
+                let detalleAjustes = "";
+                if (R.aj && R.aj.nDescansos > 0) {
+                    detalleAjustes += `\n• Días de descanso: ${R.aj.nDescansos} (remunerados al 100%, sin deducción).`;
+                }
+                if (R.aj && R.aj.nAusencias > 0) {
+                    detalleAjustes += `\n• Días de ausencia: ${R.aj.nAusencias} (-${cop(R.aj.descSalAusencia)} de salario básico).`;
+                }
+                if (R.aj && R.aj.nIncapacidades > 0) {
+                    detalleAjustes += `\n• Días de incapacidad médica: ${R.aj.nIncapacidades} (reconoce ${cop(R.aj.pagoIncapacidad)}, ajuste en nómina: -${cop(R.aj.descSalIncapacidad)}).`;
+                }
+                if (R.aj && R.aj.totalDescSalario > 0) {
+                    detalleAjustes += `\n• Total ajuste por novedades: -${cop(R.aj.totalDescSalario)} → Salario liquidado: ${cop(R.salAjustado)}.`;
+                }
+                x = "Salario quincenal nominal: " + cop(sal / 2) + " (mitad de " + cop(sal) + "/mes)."
+                    + detalleAjustes + "\n\n"
+                    + "• Valor de tu hora ordinaria: " + cop(R.e.vh) + " (salario ÷ " + divisorActual() + " h/mes).\n"
+                    + "• Salario mínimo legal (2026): " + cop(SMMLV)
+                    + (sal && sal < SMMLV ? "\n⚠️ Tu salario registrado está por debajo del mínimo legal." : "")
+                    + (R.bono ? "\n• Bonificación salarial: " + cop(R.bono) + " (suma a la base de salud y pensión)." : "");
+            } else if (sel === "extra") {
+                t = "Horas extra liquidadas";
+                x = "Quincena vencida: en este pago se cobran las horas laboradas en " + pl + ".\n"
+                    + "Diurna +25%, nocturna +75%; en dominical o festivo se suma el 90%.\n\n"
+                    + lin(R.e.de, "No hay horas extra registradas en esa quincena.");
+            } else if (sel === "recargo") {
+                t = "Recargos liquidados";
+                const nocHora = S.cfg.noc > 0 ? S.cfg.noc : 20;
+                x = "Quincena vencida: en este pago se cobran los recargos de " + pl + ".\n"
+                    + "• Nocturno 35% (desde las " + nocHora + ":00 hasta las 6:00 a.m.).\n"
+                    + "• Dominical y festivo 90% (según reforma laboral 2026).\n\n"
+                    + lin(R.e.dr, "No hay recargos registrados en esa quincena.");
+            } else if (sel === "aux") {
+                t = "Auxilio legal de transporte";
+                let descAuxTexto = "";
+                if (R.aj && R.aj.totalDescAux > 0) {
+                    descAuxTexto = `\n\n⚠️ Descuento por días no desplazados al trabajo: -${cop(R.aj.totalDescAux)}`
+                        + (R.aj.nAusencias ? ` (${R.aj.nAusencias} d ausencia: -${cop(R.aj.descAuxAusencia)})` : "")
+                        + (R.aj.nIncapacidades ? ` (${R.aj.nIncapacidades} d incapacidad: -${cop(R.aj.descAuxIncapacidad)})` : "")
+                        + ` → Auxilio liquidado: ${cop(R.ax)}.`;
+                }
+                x = !R.ap
+                    ? "No aplica: tu salario supera 2 salarios mínimos (" + cop(SMMLV * 2) + ")."
+                    : "Se aplica automáticamente por ley (salario de hasta 2 SMMLV).\n"
+                    + "Valor quincenal completo: " + cop(R.axNominal) + "."
+                    + descAuxTexto
+                    + "\nNo hace base para aportes de salud ni pensión.";
+            } else {
+                t = "Deducciones de nómina";
+                x = "Base de cotización de este pago: " + cop(R.base) + "\n\n"
+                    + "• Aporte Salud (4%): " + cop(R.sa) + "\n"
+                    + "• Aporte Pensión (4%): " + cop(R.pe) + "\n"
+                    + (R.so ? "• Fondo de solidaridad (" + fmtPct(R.tfsp) + "): " + cop(R.so) + "\n" : "")
+                    + (R.otras ? "• Otras deducciones: " + cop(R.otras) + "\n" : "")
+                    + "\nTotal deducciones: " + cop(R.ded)
+                    + "\n\nIBC mensual estimado: " + cop(R.ibcMes)
+                    + (R.tfsp ? "" : " (el Fondo de solidaridad aplica desde " + cop(4 * SMMLV) + ")");
+            }
+
+            $("info-titulo").textContent = t;
+            $("info-cuerpo").textContent = x;
+            $("info").className = "detail-card" + (COLOR_BTN[sel] ? " mc " + COLOR_BTN[sel] : "");
+            pintarRecargos();
+        }
+
+        // Recargos acumulados (solo lectura) de la quincena seleccionada, en la pestaña Historial
+        function pintarRecargos() {
+            const hq = tot(S.q[K(M, Q)]);
+            const eq = ev(S.cfg.sal, hq);
+            REC.forEach(t => {
+                const n = hq[t[0]] || 0;
+                $("h_" + t[0]).value = rd(n) + " h";
+                $("v_" + t[0]).textContent = cop(n * eq.vh * t[2]);
+            });
+            const sg = sig(M, Q);
+            $("recPeriodo").textContent = etiq(M, Q);
+            $("recCobro").textContent = fecha(sg[0], sg[1]);
+            $("recTotal").textContent = cop(eq.rc);
+        }
+
+        // ---- Calendario compacto de la quincena ----
+        function pintarGrid() {
+            const c = $("jGrid");
+            if (!c) return;
+            const [y, mo] = ym(M);
+            const ini = Q === 1 ? 1 : 16;
+            const fin = Q === 1 ? 15 : new Date(y, mo, 0).getDate();
+            const mapa = {};
+            ((S.q[K(M, Q)] || {}).dias || []).forEach(d => { mapa[d.f] = d; });
+            const sel = regTipoActual === "turno" ? $("jf").value : $("jn_f1").value;
+            const h = new Date();
+            const hoyStr = h.getFullYear() + "-" + p2(h.getMonth() + 1) + "-" + p2(h.getDate());
+            const ETQ = { descanso: "Libre", ausencia: "Aus.", incapacidad: "Inc." };
+            c.innerHTML = "";
+            for (let n = ini; n <= fin; n++) {
+                const f = M + "-" + p2(n);
+                const d = mapa[f];
+                const tipo = d ? (d.tipo || "turno") : "";
+                const dow = new Date(f + "T12:00:00").getDay();
+                const b = document.createElement("button");
+                b.type = "button";
+                b.className = "q-day" + (tipo ? " t-" + tipo : "") + ((dow === 0 || esFestivoColombia(f)) ? " dom" : "")
+                    + (f === sel ? " sel" : "") + (f === hoyStr ? " hoy" : "");
+                const txt = tipo === "turno" ? esc(d.e || "") : (ETQ[tipo] || "+");
+                b.innerHTML = `<span class="qd-w">${"DLMXJVS"[dow]}</span><span class="qd-n">${n}</span><span class="qd-t">${txt}</span>`;
+                b.setAttribute("aria-label", n + " de " + MES[mo - 1] + (tipo ? ": " + (tipo === "turno" ? "turno " + (d.e || "") : tipo) : ": sin registro"));
+                b.onclick = () => seleccionarDia(f, d);
+                c.appendChild(b);
+            }
+        }
+
+        // Toca un día: lo carga en el formulario (si ya tenía registro, queda listo para editarlo)
+        function seleccionarDia(f, d) {
+            const tipo = d ? (d.tipo || "turno") : regTipoActual;
+            cambiarTipoRegistro(tipo);
+            if (tipo === "turno") {
+                $("jf").value = f;
+                $("je").value = d ? (d.e || "") : "";
+                $("js").value = d ? (d.s || "") : "";
+                delete $("js").dataset.auto;
+                checkHolidayBadge();
+            } else {
+                $("jn_f1").value = f;
+                $("jn_f2").value = "";
+                $("jn_nota").value = (d && d.nota) || "";
+                if (d && tipo === "ausencia") { $("ausDescSal").checked = d.descSal !== false; $("ausDescAux").checked = d.descAux !== false; }
+                if (d && tipo === "incapacidad") {
+                    if ([...$("incTipo").options].some(o => Number(o.value) === Number(d.pct))) $("incTipo").value = String([...$("incTipo").options].find(o => Number(o.value) === Number(d.pct)).value);
+                    $("incDescAux").checked = d.descAux !== false;
+                }
+            }
+            $("jmsg").textContent = d ? "✏️ Editando el " + Number(f.slice(8)) + ": al guardar se reemplaza." : "";
+            updateLivePreview();
+            pintarGrid();
+        }
+
+        function jornadas() {
+            pintarGrid();
+            const c = $("jlist");
+            const r = S.q[K(M, Q)];
+            const ds = (r && r.dias) || [];
+            c.innerHTML = "";
+
+            const aj = calcularAjustesNovedades(M, Q);
+            const partesConteo = [];
+            if (aj.nTurnos) partesConteo.push(`${aj.nTurnos} turno${aj.nTurnos > 1 ? "s" : ""}`);
+            if (aj.nDescansos) partesConteo.push(`${aj.nDescansos} descanso${aj.nDescansos > 1 ? "s" : ""}`);
+            if (aj.nIncapacidades) partesConteo.push(`${aj.nIncapacidades} incapacidad${aj.nIncapacidades > 1 ? "es" : ""}`);
+            if (aj.nAusencias) partesConteo.push(`${aj.nAusencias} ausencia${aj.nAusencias > 1 ? "s" : ""}`);
+            $("jornadasCount").textContent = partesConteo.join(" · ") || (ds.length + (ds.length === 1 ? " registro" : " registros"));
+            $("gridResumen").textContent = ds.length ? $("jornadasCount").textContent : "Sin registros";
+
+            if (!ds.length) {
+                c.innerHTML = '<div style="color:var(--tx-muted); font-size:13px; text-align:center; padding:18px 0">No hay registros de turnos ni novedades en esta quincena.</div>';
+                return;
+            }
+
+            const sal = S.cfg.sal;
+            const vDia = sal / 30;
+            const vDiaMin = SMMLV / 30;
+            const vDiaAux = AUX / 30;
+
+            ds.forEach((d, i) => {
+                const tipo = d.tipo || "turno";
+                const mo = ym(d.f.slice(0, 7))[1];
+                const festName = esFestivoColombia(d.f);
+                const diaSem = new Date(d.f + "T12:00:00").getDay();
+                const esDom = diaSem === 0;
+
+                const f = document.createElement("div");
+                f.className = "jornada-item";
+
+                if (tipo === "turno") {
+                    const x = clasif(d);
+                    const tags = TIPOS.filter(t => x.h[t[0]] > 0).map(t =>
+                        `<span class="breakdown-chip">${t[1].split(" ")[0]} ${rd(x.h[t[0]])}h</span>`
+                    ).join(" ");
+
+                    f.innerHTML = `
+              <div class="jornada-main">
+                <div class="jornada-date">
+                  <span>${Number(d.f.slice(8))} de ${MES[mo - 1].slice(0, 3)}</span>
+                  ${esDom ? '<span class="badge badge-warn">Domingo</span>' : ''}
+                  ${festName ? `<span class="badge badge-ok">${esc(festName)}</span>` : ''}
+                  <span class="badge" style="background:var(--card-muted); border:1px solid var(--bd)">💼 Turno</span>
+                </div>
+                <div class="jornada-hours">
+                  Horario: <strong>${esc(d.e)} – ${esc(d.s)}</strong> · Total: <strong>${rd(x.total)} h</strong>
+                </div>
+                ${tags ? `<div class="jornada-breakdown">${tags}</div>` : ''}
+              </div>
+              <button class="btn-delete-icon" aria-label="Borrar turno del ${esc(d.f)}" title="Borrar turno">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            `;
+                    f.querySelector(".btn-delete-icon").onclick = () => {
+                        pedirConfirmacion(
+                            "Borrar turno laboral",
+                            `¿Deseas eliminar el turno del ${d.f} (${d.e} a ${d.s})?`,
+                            () => {
+                                ds.splice(i, 1);
+                                if (periodoVacio(r)) delete S.q[K(M, Q)];
+                                guardar(); pintar(); historial(); jornadas();
+                            }
+                        );
+                    };
+                } else if (tipo === "descanso") {
+                    f.innerHTML = `
+              <div class="jornada-main">
+                <div class="jornada-date">
+                  <span>${Number(d.f.slice(8))} de ${MES[mo - 1].slice(0, 3)}</span>
+                  <span class="badge badge-rest">🏖️ Descanso Remunerado</span>
+                  ${festName ? `<span class="badge badge-ok">${esc(festName)}</span>` : ''}
+                </div>
+                <div class="jornada-hours">
+                  Día libre / descanso pactado · <strong>100% salario</strong> (Sin descuento de nómina)
+                </div>
+                ${d.nota ? `<div style="font-size:11.5px; color:var(--tx-muted); margin-top:3px"><em>Nota: ${esc(d.nota)}</em></div>` : ''}
+              </div>
+              <button class="btn-delete-icon" aria-label="Borrar descanso del ${esc(d.f)}" title="Borrar descanso">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            `;
+                    f.querySelector(".btn-delete-icon").onclick = () => {
+                        pedirConfirmacion(
+                            "Borrar día de descanso",
+                            `¿Deseas eliminar el registro de descanso del ${d.f}?`,
+                            () => {
+                                ds.splice(i, 1);
+                                if (periodoVacio(r)) delete S.q[K(M, Q)];
+                                guardar(); pintar(); historial(); jornadas();
+                            }
+                        );
+                    };
+                } else if (tipo === "ausencia") {
+                    const descSal = d.descSal !== false ? Math.round(vDia) : 0;
+                    const descAux = d.descAux !== false ? Math.round(vDiaAux) : 0;
+                    f.innerHTML = `
+              <div class="jornada-main">
+                <div class="jornada-date">
+                  <span>${Number(d.f.slice(8))} de ${MES[mo - 1].slice(0, 3)}</span>
+                  <span class="badge badge-bad">🚫 Ausencia No Remunerada</span>
+                </div>
+                <div class="jornada-hours">
+                  Ajuste en nómina: <strong>-${cop(descSal)} salario</strong>${descAux ? ` · <strong>-${cop(descAux)} auxilio</strong>` : ''}
+                </div>
+                ${d.nota ? `<div style="font-size:11.5px; color:var(--tx-muted); margin-top:3px"><em>Motivo: ${esc(d.nota)}</em></div>` : ''}
+              </div>
+              <button class="btn-delete-icon" aria-label="Borrar ausencia del ${esc(d.f)}" title="Borrar ausencia">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            `;
+                    f.querySelector(".btn-delete-icon").onclick = () => {
+                        pedirConfirmacion(
+                            "Borrar ausencia",
+                            `¿Deseas eliminar el registro de ausencia del ${d.f}?`,
+                            () => {
+                                ds.splice(i, 1);
+                                if (periodoVacio(r)) delete S.q[K(M, Q)];
+                                guardar(); pintar(); historial(); jornadas();
+                            }
+                        );
+                    };
+                } else if (tipo === "incapacidad") {
+                    const pct = Number(d.pct) || 66.67;
+                    const vInc = pct >= 100 ? vDia : Math.max(vDia * (pct / 100), Math.min(vDia, vDiaMin));
+                    const ajSal = Math.max(0, vDia - vInc);
+                    const descAux = d.descAux !== false ? Math.round(vDiaAux) : 0;
+                    f.innerHTML = `
+              <div class="jornada-main">
+                <div class="jornada-date">
+                  <span>${Number(d.f.slice(8))} de ${MES[mo - 1].slice(0, 3)}</span>
+                  <span class="badge badge-info">🩺 Incapacidad (${pct}%)</span>
+                </div>
+                <div class="jornada-hours">
+                  Pago reconocido: <strong>${cop(vInc)}/día</strong> · Ajuste nómina: <strong>-${cop(ajSal)}</strong>${descAux ? ` · <strong>-${cop(descAux)} aux. transp.</strong>` : ''}
+                </div>
+                ${d.nota ? `<div style="font-size:11.5px; color:var(--tx-muted); margin-top:3px"><em>Detalle: ${esc(d.nota)}</em></div>` : ''}
+              </div>
+              <button class="btn-delete-icon" aria-label="Borrar incapacidad del ${esc(d.f)}" title="Borrar incapacidad">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            `;
+                    f.querySelector(".btn-delete-icon").onclick = () => {
+                        pedirConfirmacion(
+                            "Borrar incapacidad médica",
+                            `¿Deseas eliminar el registro de incapacidad médica del ${d.f}?`,
+                            () => {
+                                ds.splice(i, 1);
+                                if (periodoVacio(r)) delete S.q[K(M, Q)];
+                                guardar(); pintar(); historial(); jornadas();
+                            }
+                        );
+                    };
+                }
+
+                c.appendChild(f);
+            });
+        }
+
+        function historial() {
+            const c = $("hist");
+            const sal = S.cfg.sal;
+            const ks = Object.keys(S.q).sort().reverse();
+            c.innerHTML = "";
+
+            if (!ks.length) {
+                c.innerHTML = '<div style="color:var(--tx-muted); font-size:13px; text-align:center; padding:18px 0">Aún no registras ningún período.</div>';
+                return;
+            }
+
+            ks.forEach(k => {
+                const m = k.slice(0, 7);
+                const q = +k.slice(8);
+                const e = ev(sal, tot(S.q[k]));
+                const s = sig(m, q);
+                const diasNum = ((S.q[k] && S.q[k].dias) || []).length;
+
+                const f = document.createElement("div");
+                f.className = "jornada-item";
+                f.innerHTML = `
+          <div class="jornada-main" style="cursor:pointer">
+            <div class="jornada-date">
+              <span>${etiq(m, q)}</span>
+              ${k === K(M, Q) ? '<span class="badge badge-ok">Activo</span>' : ''}
+            </div>
+            <div class="jornada-hours">
+              Cobro el ${fecha(s[0], s[1])} · Extras + Recargos: <strong>${cop(e.ex + e.rc)}</strong> (${diasNum} turnos)
+            </div>
+          </div>
+          <button class="btn-delete-icon" aria-label="Borrar período ${etiq(m, q)}" title="Borrar este período">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        `;
+
+                f.querySelector(".jornada-main").onclick = () => {
+                    M = m;
+                    Q = q;
+                    cargar();
+                    activarTab("view-resumen");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                };
+
+                f.querySelector(".btn-delete-icon").onclick = () => {
+                    pedirConfirmacion(
+                        "Borrar período completo",
+                        `¿Deseas eliminar todo el registro de la quincena de ${etiq(m, q)}?`,
+                        () => {
+                            delete S.q[k];
+                            guardar();
+                            cargar();
+                        }
+                    );
+                };
+
+                c.appendChild(f);
+            });
+        }
+
+        function cargar() {
+            volcarHorasSucias();
+            const r = S.q[K(M, Q)] || { h: {}, otras: 0, bono: 0 };
+            $("mes").value = M;
+            EXT.forEach(t => {
+                $("h_" + t[0]).value = (r.h && r.h[t[0]]) || 0;
+            });
+            $("otras").value = r.otras || 0;
+            $("bono").value = r.bono || 0;
+            periodoHoras = K(M, Q);
+            horasSucias = false;
+            estadoHoras("", "");
+            const sgH = sig(M, Q);
+            $("horasPeriodo").textContent = etiq(M, Q);
+            $("horasCobro").textContent = fecha(sgH[0], sgH[1]);
+            pintar();
+            historial();
+            jornadas();
+            checkHolidayBadge();
+            updateLivePreview();
+        }
+
+        // ===== Horas extra manuales: se guardan con el botón o con Enter =====
+        let horasSucias = false;
+        let periodoHoras = null; // período al que pertenecen los campos de horas extra cargados
+
+        function estadoHoras(tipo, texto) {
+            const el = $("estadoHoras");
+            el.className = "estado-horas" + (tipo ? " " + tipo : "");
+            el.textContent = texto;
+        }
+
+        function marcarHorasSucias() {
+            horasSucias = true;
+            estadoHoras("pend", "● Cambios sin guardar. Toca “Guardar horas extra” o presiona Enter.");
+        }
+
+        function confirmarHoras(ok) {
+            const h = horasAct();
+            EXT.forEach(t => { $("h_" + t[0]).value = h[t[0]] || 0; }); // muestra lo que realmente quedó guardado
+            horasSucias = false;
+            if (!ok) { estadoHoras("err", "⚠ No se pudo guardar en este navegador."); return; }
+            const det = EXT.filter(t => h[t[0]] > 0).map(t => t[1] + " " + rd(h[t[0]]) + " h").join(", ");
+            const hora = new Date().toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+            estadoHoras("ok", "✓ Guardado a las " + hora + " — " + (det || "sin horas extra") + ".");
+        }
+
+        function guardarHoras() {
+            horasSucias = true; // hace que cambio() confirme al terminar
+            if (cambio()) mostrarToast("Horas extra guardadas");
+        }
+
+        // Si se cambia de período (o se cierra la página) con horas sin guardar, se guardan en su período
+        function volcarHorasSucias() {
+            if (!horasSucias || !periodoHoras) return;
+            const k = periodoHoras;
+            const ant = S.q[k] || {};
+            const h = horasAct();
+            REC.forEach(t => { if (ant.h && ant.h[t[0]] > 0) h[t[0]] = ant.h[t[0]]; });
+            const r = { h, otras: ant.otras || 0, bono: ant.bono || 0, dias: ant.dias || [] };
+            if (periodoVacio(r)) delete S.q[k]; else S.q[k] = r;
+            guardar(true);
+            horasSucias = false;
+        }
+
+        function cambio() {
+            S.cfg = sanearCfg({
+                sal: monto($("salario").value),
+                turno: hrs($("turno").value),
+                desc: hrs($("desc").value),
+                noc: hrs($("noc").value),
+                div: $("divisorHoras").value
+            });
+
+            const k = K(M, Q);
+            const ant = S.q[k] || {};
+            const h = horasAct();
+            // Los recargos vienen de los turnos; se conservan valores manuales heredados de versiones anteriores
+            REC.forEach(t => { if (ant.h && ant.h[t[0]] > 0) h[t[0]] = ant.h[t[0]]; });
+            const r = {
+                h,
+                otras: Math.min(monto($("otras").value), MAX_PESOS),
+                bono: Math.min(monto($("bono").value), MAX_PESOS),
+                dias: ant.dias || []
+            };
+            if (periodoVacio(r)) delete S.q[k];
+            else S.q[k] = r;
+
+            const ok = guardar(true);
+            pintar();
+            historial();
+            if (horasSucias) confirmarHoras(ok);
+            return ok;
+        }
+
+        // Navegación por pestañas
+        function activarTab(viewId, restaurar = false) {
+            if (!restaurar) { try { LS.setItem("ultima_vista", viewId); } catch (_) { } }
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.view === viewId);
+            });
+            document.querySelectorAll(".view-section").forEach(sec => {
+                sec.classList.toggle("active", sec.id === viewId);
+            });
+            if (!restaurar) window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.onclick = () => activarTab(btn.dataset.view);
+        });
+
+        // Revisión automática de festivos en el formulario de turnos
+        function checkHolidayBadge() {
+            const f = $("jf").value;
+            if (!f) {
+                $("festivoBadge").style.display = "none";
+                return;
+            }
+            const fest = esFestivoColombia(f);
+            const diaSem = new Date(f + "T12:00:00").getDay();
+            const esDom = diaSem === 0;
+
+            if (fest) {
+                $("festivoBadge").textContent = "🎉 " + fest;
+                $("festivoBadge").className = "badge badge-ok";
+                $("festivoBadge").style.display = "inline-flex";
+            } else if (esDom) {
+                $("festivoBadge").textContent = "☀️ Domingo (automático)";
+                $("festivoBadge").className = "badge badge-warn";
+                $("festivoBadge").style.display = "inline-flex";
+            } else {
+                $("festivoBadge").style.display = "none";
+            }
+        }
+
+        $("jf").addEventListener("change", () => {
+            checkHolidayBadge();
+            updateLivePreview();
+        });
+
+        // Gestión de tipos de registro (Turnos y Novedades)
+        let regTipoActual = "turno";
+
+        function cambiarTipoRegistro(tipo) {
+            regTipoActual = tipo;
+            document.querySelectorAll(".reg-tipo-btn").forEach(b => {
+                b.classList.toggle("active", b.dataset.tipo === tipo);
+            });
+
+            if (tipo === "turno") {
+                $("panelFormTurno").style.display = "block";
+                $("panelFormNovedad").style.display = "none";
+                $("tituloRegistro").textContent = "Registrar Turno Laboral";
+                $("jadd").textContent = "💾 Guardar Turno";
+                $("ayudaFestivoTexto").style.display = "block";
+                checkHolidayBadge();
+            } else {
+                $("panelFormTurno").style.display = "none";
+                $("panelFormNovedad").style.display = "block";
+                $("ayudaFestivoTexto").style.display = "none";
+                $("festivoBadge").style.display = "none";
+
+                $("seccionIncapacidad").style.display = tipo === "incapacidad" ? "block" : "none";
+                $("seccionAusencia").style.display = tipo === "ausencia" ? "block" : "none";
+
+                if (tipo === "descanso") {
+                    $("tituloRegistro").textContent = "Registrar Día de Descanso";
+                    $("lblFechaInicio").textContent = "Fecha de descanso";
+                    $("lblNotaNovedad").textContent = "Nota opcional (ej. descanso semanal, compensatorio):";
+                    $("jadd").textContent = "💾 Guardar Día de Descanso";
+                } else if (tipo === "ausencia") {
+                    $("tituloRegistro").textContent = "Registrar Ausencia";
+                    $("lblFechaInicio").textContent = "Fecha de ausencia";
+                    $("lblNotaNovedad").textContent = "Motivo opcional (ej. permiso no remunerado, falta):";
+                    $("jadd").textContent = "💾 Guardar Ausencia";
+                } else if (tipo === "incapacidad") {
+                    $("tituloRegistro").textContent = "Registrar Incapacidad Médica";
+                    $("lblFechaInicio").textContent = "Fecha inicial de incapacidad";
+                    $("lblNotaNovedad").textContent = "Diagnóstico o número de radicado (opcional):";
+                    $("jadd").textContent = "💾 Guardar Incapacidad Médica";
+                }
+
+                if (!$("jn_f1").value && $("jf").value) {
+                    $("jn_f1").value = $("jf").value;
+                }
+            }
+            updateLivePreview();
+            pintarGrid();
+        }
+
+        document.querySelectorAll(".reg-tipo-btn").forEach(btn => {
+            btn.onclick = () => cambiarTipoRegistro(btn.dataset.tipo);
+        });
+
+        // Previsualización en vivo (Turno ordinario o Novedad)
+        function updateLivePreview() {
+            const cont = $("livePreview");
+
+            if (regTipoActual === "turno") {
+                const f = $("jf").value;
+                const e = $("je").value;
+                const s = $("js").value;
+
+                if (!f || !e || !s || e === s) {
+                    cont.style.display = "none";
+                    return;
+                }
+
+                const dummy = { f, e, s, tipo: "turno" };
+                const calc = clasif(dummy);
+                const tags = TIPOS.filter(t => calc.h[t[0]] > 0).map(t =>
+                    `<strong>${t[1].split(" ")[0]}:</strong> ${rd(calc.h[t[0]])}h`
+                );
+
+                cont.style.display = "block";
+                $("previewTitle").textContent = `Duración estimada: ${rd(calc.total)} horas`;
+                $("previewDetails").innerHTML = tags.length
+                    ? "Horas liquidadas: " + tags.join(" · ")
+                    : "Sin recargos ni horas extras en este horario.";
+            } else {
+                const f1 = $("jn_f1").value;
+                const f2 = $("jn_f2").value || f1;
+
+                if (!f1 || !fechaValida(f1) || (f2 && !fechaValida(f2))) {
+                    cont.style.display = "none";
+                    return;
+                }
+
+                // Cantidad de días
+                let nDias = 1;
+                if (f2 && f2 >= f1) {
+                    const d1 = new Date(f1 + "T12:00:00");
+                    const d2 = new Date(f2 + "T12:00:00");
+                    nDias = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1);
+                }
+
+                const sal = S.cfg.sal;
+                const vDia = sal / 30;
+                const vDiaMin = SMMLV / 30;
+                const vDiaAux = AUX / 30;
+
+                cont.style.display = "block";
+
+                if (regTipoActual === "descanso") {
+                    $("previewTitle").textContent = `🏖️ ${nDias} día${nDias > 1 ? "s" : ""} de descanso remunerado`;
+                    $("previewDetails").innerHTML = "Remunerado al 100% dentro del salario ordinario pactado. <strong>$0 de descuento en nómina.</strong>";
+                } else if (regTipoActual === "ausencia") {
+                    const descSal = $("ausDescSal").checked ? Math.round(vDia * nDias) : 0;
+                    const descAux = $("ausDescAux").checked ? Math.round(vDiaAux * nDias) : 0;
+                    const totalDesc = descSal + descAux;
+                    $("previewTitle").textContent = `🚫 ${nDias} día${nDias > 1 ? "s" : ""} de ausencia no remunerada`;
+                    $("previewDetails").innerHTML = `Descuento salario: <strong>-${cop(descSal)}</strong>${descAux ? ` · Descuento auxilio transporte: <strong>-${cop(descAux)}</strong>` : ""}<br>Impacto total en este pago: <strong>-${cop(totalDesc)}</strong>`;
+                } else if (regTipoActual === "incapacidad") {
+                    const pct = Number($("incTipo").value) || 66.67;
+                    const vInc = pct >= 100 ? vDia : Math.max(vDia * (pct / 100), Math.min(vDia, vDiaMin));
+                    const ajSalDia = Math.max(0, vDia - vInc);
+                    const ajSalTot = Math.round(ajSalDia * nDias);
+                    const descAux = $("incDescAux").checked ? Math.round(vDiaAux * nDias) : 0;
+                    const pagoTot = Math.round(vInc * nDias);
+
+                    $("previewTitle").textContent = `🩺 Incapacidad médica (${nDias} día${nDias > 1 ? "s" : ""} al ${pct}%)`;
+                    $("previewDetails").innerHTML = `Pago reconocido por incapacidad: <strong>${cop(pagoTot)}</strong> (${cop(vInc)}/día)<br>Ajuste en salario ordinario: <strong>-${cop(ajSalTot)}</strong>${descAux ? ` · Descuento auxilio de transporte: <strong>-${cop(descAux)}</strong>` : ""}`;
+                }
+            }
+        }
+
+        $("je").addEventListener("input", updateLivePreview);
+        $("js").addEventListener("input", updateLivePreview);
+        $("jn_f1").addEventListener("change", updateLivePreview);
+        $("jn_f2").addEventListener("change", updateLivePreview);
+        $("jn_f1").addEventListener("input", updateLivePreview);
+        $("jn_f2").addEventListener("input", updateLivePreview);
+        $("incTipo").addEventListener("change", updateLivePreview);
+        $("incDescAux").addEventListener("change", updateLivePreview);
+        $("ausDescSal").addEventListener("change", updateLivePreview);
+        $("ausDescAux").addEventListener("change", updateLivePreview);
+
+        // Autocalcular hora de salida sumando duración del turno
+        const autoSalida = () => {
+            const e = $("je").value;
+            const o = $("js");
+            if (!e || (o.value && !o.dataset.auto)) return;
+            const [h, m] = e.split(":").map(Number);
+            const turnoMins = Math.round((S.cfg.turno > 0 ? S.cfg.turno : 9.15) * 60);
+            const t = (h * 60 + m + turnoMins) % 1440;
+            o.value = p2(Math.floor(t / 60)) + ":" + p2(t % 60);
+            o.dataset.auto = "1";
+            updateLivePreview();
+        };
+
+        $("je").addEventListener("change", autoSalida);
+        $("js").addEventListener("input", () => delete $("js").dataset.auto);
+
+        // Botones marcar entrada y salida ahora
+        $("bent").onclick = () => {
+            const n = new Date();
+            $("jf").value = n.getFullYear() + "-" + p2(n.getMonth() + 1) + "-" + p2(n.getDate());
+            $("je").value = hm(n);
+            checkHolidayBadge();
+            autoSalida();
+        };
+
+        $("bsal").onclick = () => {
+            $("js").value = hm(new Date());
+            delete $("js").dataset.auto;
+            updateLivePreview();
+        };
+
+        // Guardar turno o novedad
+        $("jf").addEventListener("input", pintarGrid);
+        $("jn_f1").addEventListener("input", pintarGrid);
+
+        $("jadd").onclick = () => {
+            if (regTipoActual === "turno") {
+                const f = $("jf").value;
+                const e = $("je").value;
+                const s = $("js").value;
+
+                if (!f || !e || !s) {
+                    $("jmsg").textContent = "⚠️ Completa la fecha, la hora de entrada y la de salida.";
+                    return;
+                }
+                if (e === s) {
+                    $("jmsg").textContent = "⚠️ La hora de salida no puede ser igual a la de entrada.";
+                    return;
+                }
+
+                if (!fechaValida(f) || !RX_HORA.test(e) || !RX_HORA.test(s)) {
+                    $("jmsg").textContent = "⚠️ La fecha o las horas no son válidas.";
+                    return;
+                }
+
+                const m = f.slice(0, 7);
+                const q = Number(f.slice(8)) <= 15 ? 1 : 2;
+                const k = K(m, q);
+                const r = S.q[k] || (S.q[k] = { h: {}, otras: 0, bono: 0, dias: [] });
+
+                const reemplazo = (r.dias || []).some(d => d.f === f);
+                r.dias = (r.dias || []).filter(d => d.f !== f);
+                r.dias.push({ f, tipo: "turno", e, s });
+                r.dias.sort((a, b) => (a.f < b.f ? -1 : 1));
+
+                M = m;
+                Q = q;
+                guardar();
+                cargar();
+
+                $("jmsg").textContent = (reemplazo ? "♻️ Se reemplazó el turno del " + Number(f.slice(8)) + " de " + MES[ym(m)[1] - 1] : "✅ Turno guardado")
+                    + " en la quincena de " + etiq(m, q) + ".";
+                mostrarToast("Turno registrado correctamente");
+                // Pasa al día siguiente para seguir cargando la quincena sin tocar la fecha
+                const dSig = new Date(f + "T12:00:00");
+                dSig.setDate(dSig.getDate() + 1);
+                $("jf").value = dSig.getFullYear() + "-" + p2(dSig.getMonth() + 1) + "-" + p2(dSig.getDate());
+                $("je").value = "";
+                $("js").value = "";
+                delete $("js").dataset.auto;
+                checkHolidayBadge();
+                updateLivePreview();
+                pintarGrid();
+                setTimeout(() => $("jmsg").textContent = "", 3500);
+            } else {
+                // Guardar novedad (descanso, ausencia, incapacidad)
+                const f1 = $("jn_f1").value;
+                const f2 = $("jn_f2").value || f1;
+
+                if (!f1 || !fechaValida(f1)) {
+                    $("jmsg").textContent = "⚠️ Selecciona una fecha válida.";
+                    return;
+                }
+                if (f2 && !fechaValida(f2)) {
+                    $("jmsg").textContent = "⚠️ La fecha final no es válida.";
+                    return;
+                }
+                if (f2 && f2 < f1) {
+                    $("jmsg").textContent = "⚠️ La fecha final no puede ser anterior a la inicial.";
+                    return;
+                }
+
+                // Generar lista de fechas
+                const fechas = [];
+                const cur = new Date(f1 + "T12:00:00");
+                const fin = new Date(f2 + "T12:00:00");
+                let limite = 31; // máximo 31 días por registro para seguridad
+                while (cur <= fin && limite > 0) {
+                    const fStr = cur.getFullYear() + "-" + p2(cur.getMonth() + 1) + "-" + p2(cur.getDate());
+                    fechas.push(fStr);
+                    cur.setDate(cur.getDate() + 1);
+                    limite--;
+                }
+
+                fechas.forEach(fStr => {
+                    const m = fStr.slice(0, 7);
+                    const q = Number(fStr.slice(8)) <= 15 ? 1 : 2;
+                    const k = K(m, q);
+                    const r = S.q[k] || (S.q[k] = { h: {}, otras: 0, bono: 0, dias: [] });
+
+                    r.dias = (r.dias || []).filter(d => d.f !== fStr);
+
+                    if (regTipoActual === "descanso") {
+                        r.dias.push({ f: fStr, tipo: "descanso", nota: $("jn_nota").value.trim() });
+                    } else if (regTipoActual === "ausencia") {
+                        r.dias.push({
+                            f: fStr,
+                            tipo: "ausencia",
+                            nota: $("jn_nota").value.trim(),
+                            descSal: $("ausDescSal").checked,
+                            descAux: $("ausDescAux").checked
+                        });
+                    } else if (regTipoActual === "incapacidad") {
+                        r.dias.push({
+                            f: fStr,
+                            tipo: "incapacidad",
+                            pct: Number($("incTipo").value) || 66.67,
+                            nota: $("jn_nota").value.trim(),
+                            descAux: $("incDescAux").checked
+                        });
+                    }
+
+                    r.dias.sort((a, b) => (a.f < b.f ? -1 : 1));
+                });
+
+                // Mover vista a la quincena inicial
+                M = f1.slice(0, 7);
+                Q = Number(f1.slice(8)) <= 15 ? 1 : 2;
+                guardar();
+                cargar();
+
+                const nombreNovedad = regTipoActual === "descanso" ? "Día(s) de descanso" : (regTipoActual === "ausencia" ? "Ausencia(s)" : "Incapacidad médica");
+                $("jmsg").textContent = `✅ ${nombreNovedad} guardado (${fechas.length} día${fechas.length > 1 ? "s" : ""}).`;
+                mostrarToast(`${nombreNovedad} registrado con éxito`);
+                setTimeout(() => $("jmsg").textContent = "", 3500);
+            }
+        };
+
+        // Copiar volante al portapapeles (WhatsApp / Notas)
+        $("btnCopiarResumen").onclick = () => {
+            const sal = S.cfg.sal;
+            const aj = R.aj || {};
+            const lineasNovedades = [];
+            if (aj.nDescansos > 0) lineasNovedades.push("🏖️ *Descansos Remunerados:* " + aj.nDescansos + " día(s)");
+            if (aj.nAusencias > 0) lineasNovedades.push("🚫 *Ausencias (" + aj.nAusencias + " día(s)):* -" + cop(aj.descSalAusencia));
+            if (aj.nIncapacidades > 0) lineasNovedades.push("🩺 *Incapacidad Médica (" + aj.nIncapacidades + " día(s)):* " + cop(aj.pagoIncapacidad) + " (Ajuste: -" + cop(aj.descSalIncapacidad) + ")");
+
+            const texto = [
+                "📄 *DESPRENDIBLE ESTIMADO DE NÓMINA*",
+                "🗓️ *Período:* " + etiq(M, Q) + " (" + fecha(M, Q) + ")",
+                "------------------------------------",
+                "💵 *Salario Quincenal:* " + cop(R.salAjustado) + (aj.totalDescSalario > 0 ? " (Nominal: " + cop(sal / 2) + ")" : ""),
+                ...lineasNovedades,
+                "⚡ *Horas Extra:* " + cop(R.e.ex),
+                "🌙 *Recargos Noct/Fest:* " + cop(R.e.rc),
+                R.ax ? "🚌 *Auxilio Transporte:* " + cop(R.ax) : "",
+                R.bono ? "🎁 *Bonificación:* " + cop(R.bono) : "",
+                "------------------------------------",
+                "📉 *Deducciones Totales:* " + cop(R.ded),
+                "   • Salud (4%): " + cop(R.sa),
+                "   • Pensión (4%): " + cop(R.pe),
+                R.so ? "   • Fdo. Solidaridad (" + fmtPct(R.tfsp) + "): " + cop(R.so) : "",
+                R.otras ? "   • Otras deducciones: " + cop(R.otras) : "",
+                "====================================",
+                "💰 *NETO ESTIMADO A PAGAR: " + cop(R.neto) + "*",
+                "====================================",
+                "Generado con Control de Ingresos Laborales"
+            ].filter(Boolean).join("\n");
+
+            navigator.clipboard.writeText(texto)
+                .then(() => mostrarToast("¡Copiado al portapapeles!"))
+                .catch(() => alert(texto));
+        };
+
+        // Imprimir
+        $("btnImprimir").onclick = () => window.print();
+
+        // Descarga local de un archivo generado en el navegador (100% offline)
+        function descargar(nombre, contenido, tipo) {
+            const url = URL.createObjectURL(new Blob([contenido], { type: tipo }));
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = nombre;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+        const hoyISO = () => {
+            const d = new Date();
+            return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+        };
+
+        // Exportar copia de seguridad (JSON)
+        $("btnExportarJson").onclick = () => {
+            const respaldo = { app: "control-ingresos-laborales", exportado: new Date().toISOString(), cfg: S.cfg, q: S.q };
+            descargar("control_ingresos_respaldo_" + hoyISO() + ".json", JSON.stringify(respaldo, null, 2), "application/json");
+            mostrarToast("Copia de seguridad descargada");
+        };
+
+        // Restaurar copia de seguridad (JSON) con validación y confirmación
+        const MAX_RESPALDO = 5 * 1024 * 1024; // 5 MB
+        $("btnImportarTrigger").onclick = () => $("importFileInput").click();
+        $("importFileInput").onchange = e => {
+            const file = e.target.files[0];
+            e.target.value = "";
+            if (!file) return;
+            if (file.size > MAX_RESPALDO) {
+                alert("El archivo es demasiado grande para ser un respaldo válido (máximo 5 MB).");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = ev => {
+                let res = null;
+                try {
+                    res = sanear(JSON.parse(ev.target.result));
+                } catch (err) {
+                    alert("El archivo no es un JSON válido.");
+                    return;
+                }
+                if (!res) {
+                    alert("El archivo no tiene el formato válido de respaldo.");
+                    return;
+                }
+                const nPer = Object.keys(res.S.q).length;
+                const nDias = Object.values(res.S.q).reduce((a, r) => a + (r.dias || []).length, 0);
+                pedirConfirmacion(
+                    "Restaurar copia de seguridad",
+                    `Se reemplazarán TODOS los datos de este dispositivo por los del respaldo: ${nPer} períodos y ${nDias} turnos.`
+                    + (res.omitidos ? ` Se omitirán ${res.omitidos} registros no válidos.` : "")
+                    + " Si tienes datos recientes, exporta primero una copia.",
+                    () => {
+                        S = res.S;
+                        migrarBono(res.bonoLegado);
+                        aplicarCfgUI();
+                        guardar(true);
+                        cargar();
+                        mostrarToast("Datos restaurados con éxito");
+                    },
+                    "Restaurar"
+                );
+            };
+            reader.onerror = () => alert("No se pudo leer el archivo.");
+            reader.readAsText(file);
+        };
+
+        // Exportar historial de pagos a CSV (Excel en español: separador ";", UTF-8 con BOM, montos en pesos enteros)
+        $("btnExportarCsv").onclick = () => {
+            const pagos = new Set();
+            Object.keys(S.q).forEach(k => {
+                pagos.add(k);
+                const s = sig(k.slice(0, 7), +k.slice(8));
+                pagos.add(K(s[0], s[1]));
+            });
+            if (!pagos.size) {
+                mostrarToast("No hay períodos para exportar");
+                return;
+            }
+
+            const celda = v => typeof v === "number" ? String(Math.round(v)) : '"' + String(v).replace(/"/g, '""') + '"';
+            const filas = [["Período", "Fecha de pago", "Turnos", "Descansos", "Ausencias", "Incapacidades", "Salario quincenal", "Horas extra", "Recargos", "Bonificación",
+                "Auxilio de transporte", "Salud", "Pensión", "Fondo de solidaridad", "Otras deducciones", "Total deducciones", "Neto a pagar"]];
+
+            [...pagos].sort().forEach(k => {
+                const m = k.slice(0, 7);
+                const q = +k.slice(8);
+                const y = m.slice(0, 4);
+                const c = liquidar(m, q);
+                filas.push([etiq(m, q) + " de " + y, fecha(m, q) + " de " + y, (c.aj && c.aj.nTurnos) || 0, (c.aj && c.aj.nDescansos) || 0, (c.aj && c.aj.nAusencias) || 0, (c.aj && c.aj.nIncapacidades) || 0, c.salAjustado, c.e.ex, c.e.rc, c.bono,
+                    c.ax, c.sa, c.pe, c.so, c.otras, c.ded, c.neto]);
+            });
+
+            const csv = "\uFEFF" + filas.map(f => f.map(celda).join(";")).join("\r\n");
+            descargar("historial_ingresos_" + hoyISO() + ".csv", csv, "text/csv;charset=utf-8");
+            mostrarToast("Archivo CSV descargado");
+        };
+
+        // Borrar todo
+        $("btnBorrarTodo").onclick = () => {
+            pedirConfirmacion(
+                "¿Borrar TODOS los datos?",
+                "Esto eliminará todas las jornadas, historial y configuraciones registradas en este dispositivo.",
+                () => {
+                    LS.removeItem("ingresos_q");
+                    LS.removeItem("ingresos_q_respaldo_danado");
+                    LS.removeItem("sync_gist_token");
+                    LS.removeItem("sync_gist_id");
+                    LS.removeItem("sync_gist_auto");
+                    location.reload();
+                }
+            );
+        };
+
+        // Botones rápidos para inicio nocturno
+        $("btnNoc19").onclick = () => { $("noc").value = 19; cambio(); };
+        $("btnNoc20").onclick = () => { $("noc").value = 20; cambio(); };
+
+        // Modo oscuro / claro
+        const updateThemeIcon = isDark => {
+            $("themeIcon").textContent = isDark ? "☀️" : "🌙";
+            $("themeText").textContent = isDark ? "Claro" : "Oscuro";
+        };
+
+        const savedTheme = LS.getItem("theme_mode");
+        if (savedTheme) {
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            updateThemeIcon(savedTheme === "dark");
+        } else {
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            updateThemeIcon(prefersDark);
+        }
+
+        $("themeToggle").onclick = () => {
+            const current = document.documentElement.getAttribute("data-theme");
+            const isDark = current === "dark" || (!current && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            const next = isDark ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            LS.setItem("theme_mode", next);
+            updateThemeIcon(next === "dark");
+        };
+
+        // =============================================================
+        // SINCRONIZACIÓN ENTRE DISPOSITIVOS (3 OPCIONES)
+        // =============================================================
+        function bytesToBase64Url(bytes) {
+            let bin = "";
+            for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+            return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        }
+
+        function base64UrlToBytes(str) {
+            let b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+            while (b64.length % 4) b64 += "=";
+            const bin = atob(b64);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return bytes;
+        }
+
+        async function copiarTexto(texto) {
+            let copiado = false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(texto);
+                    copiado = true;
+                } catch (_) {}
+            }
+            if (!copiado) {
+                try {
+                    const ta = document.createElement("textarea");
+                    ta.value = texto;
+                    ta.style.position = "fixed";
+                    ta.style.left = "-9999px";
+                    ta.style.top = "0";
+                    ta.setAttribute("readonly", "");
+                    document.body.appendChild(ta);
+                    ta.focus();
+                    ta.select();
+                    ta.setSelectionRange(0, ta.value.length);
+                    copiado = document.execCommand("copy");
+                    ta.remove();
+                } catch (_) {}
+            }
+            return copiado;
+        }
+
+        async function comprimirPayload(obj) {
+            const json = JSON.stringify(obj);
+            if (window.CompressionStream) {
+                const stream = new Blob([json]).stream().pipeThrough(new CompressionStream("gzip"));
+                const buf = await new Response(stream).arrayBuffer();
+                return "gz_" + bytesToBase64Url(new Uint8Array(buf));
+            }
+            return "b64_" + btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        }
+
+        async function descomprimirPayload(raw) {
+            let s = (raw || "").trim();
+            if (!s) throw new Error("No se ha ingresado ningún código.");
+
+            // Limpiar cercas de código markdown, comillas o espacios de chats
+            s = s.replace(/^```[a-z]*\s*/i, "").replace(/\s*```$/i, "").trim();
+            s = s.replace(/^`+|`+$/g, "").trim();
+            s = s.replace(/^["']+|["']+$/g, "").trim();
+            // Limpiar posibles prefijos de chat estilo WhatsApp: "[12:30, ...] Nombre: "
+            s = s.replace(/^\[.*?\]\s*[^:]*:\s*/, "").trim();
+
+            // Si se pegó una URL completa que contiene #sync= o ?sync=
+            if (s.includes("#sync=")) {
+                s = s.split("#sync=")[1].split("&")[0];
+            } else if (s.includes("?sync=")) {
+                s = s.split("?sync=")[1].split("&")[0];
+            }
+
+            // Si es JSON en texto plano directamente
+            if (s.startsWith("{") && s.endsWith("}")) {
+                try {
+                    return JSON.parse(s);
+                } catch (e) {
+                    throw new Error("El texto JSON no tiene un formato válido.");
+                }
+            }
+
+            let tienePrefijo = false;
+            let esGzip = false;
+            let esB64Plano = false;
+
+            if (s.startsWith("TALMA_")) {
+                s = s.slice(6);
+                tienePrefijo = true;
+            } else if (s.startsWith("gz_")) {
+                s = s.slice(3);
+                tienePrefijo = true;
+                esGzip = true;
+            } else if (s.startsWith("b64_")) {
+                s = s.slice(4);
+                tienePrefijo = true;
+                esB64Plano = true;
+            }
+
+            s = s.trim();
+            if (!s) throw new Error("El código de sincronización está vacío.");
+
+            // Decodificar Base64 / Base64Url
+            let bytes;
+            try {
+                bytes = base64UrlToBytes(s);
+            } catch (e) {
+                throw new Error("El código parece estar incompleto o contiene caracteres no reconocidos. Asegúrate de copiar todo el bloque sin cortar texto.");
+            }
+
+            if (!bytes || !bytes.length) {
+                throw new Error("El código de sincronización no contiene datos válidos.");
+            }
+
+            // Detección automática por número mágico GZIP (0x1f, 0x8b) o por prefijo
+            const esCabeceraGzip = (bytes.length >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b);
+
+            if (esCabeceraGzip || esGzip) {
+                if (window.DecompressionStream) {
+                    try {
+                        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+                        const texto = await new Response(stream).text();
+                        return JSON.parse(texto);
+                    } catch (e) {
+                        throw new Error("No se pudieron descomprimir los datos. Es muy probable que el código esté incompleto o cortado al copiarlo de WhatsApp. Por favor cópialo nuevamente completo.");
+                    }
+                } else {
+                    throw new Error("Tu navegador actual no soporta descompresión GZIP automática. Prueba exportando e importando una 'Copia de Seguridad (JSON)'.");
+                }
+            }
+
+            // Intentar como Base64 de JSON plano
+            try {
+                let bin = "";
+                for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+                const textoPlano = decodeURIComponent(escape(bin));
+                if (textoPlano.trim().startsWith("{")) {
+                    return JSON.parse(textoPlano);
+                }
+            } catch (_) {}
+
+            if (!tienePrefijo) {
+                throw new Error("El código de sincronización parece estar incompleto o cortado (falta el encabezado del código). Asegúrate de copiar todo el texto sin omitir partes.");
+            }
+
+            throw new Error("No se pudo interpretar el formato del código de sincronización.");
+        }
+
+        async function procesarCodigoSync(rawCode, origen = "Código") {
+            if (!rawCode || !rawCode.trim()) {
+                mostrarToast("⚠️ Pega primero un código de sincronización válido");
+                return;
+            }
+            try {
+                const data = await descomprimirPayload(rawCode);
+                const res = sanear(data);
+                if (!res) {
+                    alert("El formato del código de sincronización no es válido o no corresponde a esta aplicación.");
+                    return;
+                }
+                const nPer = Object.keys(res.S.q).length;
+                const nDias = Object.values(res.S.q).reduce((a, r) => a + (r.dias || []).length, 0);
+                pedirConfirmacion(
+                    "Sincronizar datos (" + origen + ")",
+                    `Se aplicarán ${nPer} períodos y ${nDias} turnos/novedades transferidos.`
+                    + (res.omitidos ? ` Se omitirán ${res.omitidos} registros no válidos.` : "")
+                    + " ¿Deseas reemplazar los datos de este dispositivo con los transferidos?",
+                    () => {
+                        S = res.S;
+                        migrarBono(res.bonoLegado);
+                        aplicarCfgUI();
+                        guardar(true);
+                        cargar();
+                        mostrarToast("¡Datos sincronizados con éxito!");
+                    },
+                    "Sincronizar"
+                );
+            } catch (e) {
+                alert("⚠️ Error al sincronizar:\n\n" + e.message + "\n\n💡 Sugerencia: En el dispositivo donde tienes tus datos, presiona 'Copiar Código' o 'Enviar por WhatsApp' y transfiérelo sin modificar.");
+            }
+        }
+
+        // Pestañas del panel de sincronización
+        document.querySelectorAll(".sync-tab-btn").forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll(".sync-tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".sync-panel").forEach(p => p.style.display = "none");
+                btn.classList.add("active");
+                const target = $(btn.dataset.tab);
+                if (target) target.style.display = "block";
+            };
+        });
+
+        // 1. Opción Código de texto (Portapapeles / WhatsApp)
+        $("btnCopiarCodigoSync").onclick = async () => {
+            try {
+                const payload = { app: "control-ingresos-laborales", exportado: new Date().toISOString(), cfg: S.cfg, q: S.q };
+                const codigo = await comprimirPayload(payload);
+                $("inputCodigoSync").value = codigo;
+                $("inputCodigoSync").select();
+                const copiado = await copiarTexto(codigo);
+                if (copiado) {
+                    mostrarToast("¡Código copiado al portapapeles!");
+                } else {
+                    mostrarToast("Código generado en la casilla. Cópialo o compártelo.");
+                }
+            } catch (e) {
+                mostrarToast("Error al generar código: " + e.message);
+            }
+        };
+
+        // Botón Enviar por WhatsApp / Compartir
+        $("btnCompartirSync").onclick = async () => {
+            try {
+                const payload = { app: "control-ingresos-laborales", exportado: new Date().toISOString(), cfg: S.cfg, q: S.q };
+                const codigo = await comprimirPayload(payload);
+                $("inputCodigoSync").value = codigo;
+
+                const textoCompartir = `*Código de Sincronización Mis Ingresos*\nCopia todo el bloque de abajo y pégalo en la opción 'Sincronizar' de tu otro dispositivo:\n\n` + "```\n" + codigo + "\n```";
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: "Código de Sincronización - Control de Ingresos",
+                            text: textoCompartir
+                        });
+                        mostrarToast("¡Compartido con éxito!");
+                        return;
+                    } catch (err) {
+                        if (err.name === "AbortError") return;
+                    }
+                }
+
+                // Fallback directo a WhatsApp
+                const urlWa = "https://api.whatsapp.com/send?text=" + encodeURIComponent(textoCompartir);
+                window.open(urlWa, "_blank");
+            } catch (e) {
+                mostrarToast("Error al compartir: " + e.message);
+            }
+        };
+
+        // Pegar desde el portapapeles
+        $("btnPegarClipSync").onclick = async () => {
+            if (navigator.clipboard && navigator.clipboard.readText) {
+                try {
+                    const txt = await navigator.clipboard.readText();
+                    if (txt && txt.trim()) {
+                        $("inputCodigoSync").value = txt.trim();
+                        mostrarToast("Código pegado del portapapeles");
+                        return;
+                    }
+                } catch (_) {}
+            }
+            $("inputCodigoSync").focus();
+            mostrarToast("Mantén presionado sobre la casilla y elige 'Pegar'");
+        };
+
+        $("btnPegarCodigoSync").onclick = () => {
+            procesarCodigoSync($("inputCodigoSync").value, "Portapapeles");
+        };
+
+        // 2. Opción Código QR (Generador SVG nativo)
+        const QRCodeLib = (function () {
+            function QR8bitByte(data) { this.mode = 4; this.data = data; }
+            QR8bitByte.prototype = {
+                getLength: function () { return this.data.length; },
+                write: function (buffer) { for (let i = 0; i < this.data.length; i++) buffer.put(this.data.charCodeAt(i), 8); }
+            };
+            const QRMath = {
+                glog: function (n) { if (n < 1) throw new Error("glog(" + n + ")"); return QRMath.LOG_TABLE[n]; },
+                gexp: function (n) { while (n < 0) n += 255; while (n >= 255) n -= 255; return QRMath.EXP_TABLE[n]; },
+                EXP_TABLE: new Array(256),
+                LOG_TABLE: new Array(256)
+            };
+            for (let i = 0; i < 8; i++) QRMath.EXP_TABLE[i] = 1 << i;
+            for (let i = 8; i < 256; i++) QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4] ^ QRMath.EXP_TABLE[i - 5] ^ QRMath.EXP_TABLE[i - 6] ^ QRMath.EXP_TABLE[i - 8];
+            for (let i = 0; i < 255; i++) QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i;
+
+            function QRPolynomial(num, shift) {
+                let offset = 0;
+                while (offset < num.length && num[offset] == 0) offset++;
+                this.num = new Array(num.length - offset + shift);
+                for (let i = 0; i < num.length - offset; i++) this.num[i] = num[i + offset];
+            }
+            QRPolynomial.prototype = {
+                get: function (i) { return this.num[i]; },
+                getLength: function () { return this.num.length; },
+                multiply: function (e) {
+                    const num = new Array(this.getLength() + e.getLength() - 1).fill(0);
+                    for (let i = 0; i < this.getLength(); i++) {
+                        for (let j = 0; j < e.getLength(); j++) {
+                            num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i)) + QRMath.glog(e.get(j)));
+                        }
+                    }
+                    return new QRPolynomial(num, 0);
+                },
+                mod: function (e) {
+                    if (this.getLength() - e.getLength() < 0) return this;
+                    const ratio = QRMath.glog(this.get(0)) - QRMath.glog(e.get(0));
+                    const num = new Array(this.getLength());
+                    for (let i = 0; i < this.getLength(); i++) num[i] = this.get(i);
+                    for (let i = 0; i < e.getLength(); i++) num[i] ^= QRMath.gexp(QRMath.glog(e.get(i)) + ratio);
+                    return new QRPolynomial(num, 0).mod(e);
+                }
+            };
+
+            function QRRSBlock(totalCount, dataCount) { this.totalCount = totalCount; this.dataCount = dataCount; }
+            const RS_BLOCK_TABLE_L = [
+                [[1, 26, 19]], [[1, 44, 34]], [[1, 70, 55]], [[1, 100, 80]], [[1, 134, 108]],
+                [[2, 86, 68]], [[2, 98, 78]], [[2, 121, 97]], [[2, 146, 116]], [[2, 86, 68], [2, 87, 69]],
+                [[4, 101, 81]], [[2, 116, 92], [2, 117, 93]], [[4, 133, 107]], [[3, 145, 115], [1, 146, 116]],
+                [[5, 109, 87], [1, 110, 88]], [[5, 122, 98], [1, 123, 99]], [[1, 135, 107], [5, 136, 108]],
+                [[5, 150, 120], [1, 151, 121]], [[3, 141, 113], [4, 142, 114]], [[3, 135, 107], [5, 136, 108]]
+            ];
+
+            QRRSBlock.getRSBlocks = function (typeNumber) {
+                const row = RS_BLOCK_TABLE_L[typeNumber - 1];
+                const list = [];
+                for (let i = 0; i < row.length; i++) {
+                    const count = row[i][0], total = row[i][1], dCount = row[i][2];
+                    for (let j = 0; j < count; j++) list.push(new QRRSBlock(total, dCount));
+                }
+                return list;
+            };
+
+            function QRBitBuffer() { this.buffer = []; this.length = 0; }
+            QRBitBuffer.prototype = {
+                get: function (i) { return ((this.buffer[Math.floor(i / 8)] >>> (7 - i % 8)) & 1) == 1; },
+                put: function (num, length) { for (let i = 0; i < length; i++) this.putBit(((num >>> (length - i - 1)) & 1) == 1); },
+                putBit: function (bit) {
+                    const bufIndex = Math.floor(this.length / 8);
+                    if (this.buffer.length <= bufIndex) this.buffer.push(0);
+                    if (bit) this.buffer[bufIndex] |= (0x80 >>> (this.length % 8));
+                    this.length++;
+                }
+            };
+
+            const ALIGN_POS = [
+                [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34],
+                [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50],
+                [6, 30, 54], [6, 32, 58], [6, 34, 62], [6, 26, 46, 66],
+                [6, 26, 48, 70], [6, 26, 50, 74], [6, 30, 54, 78],
+                [6, 30, 56, 82], [6, 30, 58, 86], [6, 34, 62, 90]
+            ];
+
+            function QRCode(typeNumber) {
+                this.typeNumber = typeNumber;
+                this.errorCorrectLevel = 1;
+                this.modules = null;
+                this.moduleCount = 0;
+                this.dataList = [];
+            }
+            QRCode.prototype = {
+                addData: function (data) { this.dataList.push(new QR8bitByte(data)); },
+                isDark: function (r, c) { return this.modules[r][c]; },
+                make: function () {
+                    this.moduleCount = this.typeNumber * 4 + 17;
+                    this.modules = new Array(this.moduleCount);
+                    for (let r = 0; r < this.moduleCount; r++) this.modules[r] = new Array(this.moduleCount).fill(null);
+                    this.setupPositionProbePattern(0, 0);
+                    this.setupPositionProbePattern(this.moduleCount - 7, 0);
+                    this.setupPositionProbePattern(0, this.moduleCount - 7);
+                    this.setupPositionAdjustPattern();
+                    this.setupTimingPattern();
+                    this.setupTypeInfo(false, 0);
+                    if (this.typeNumber >= 7) this.setupTypeNumber(false);
+                    const data = this.createData();
+                    this.mapData(data, 0);
+                },
+                setupPositionProbePattern: function (r, c) {
+                    for (let rd = -1; rd <= 7; rd++) {
+                        if (r + rd <= -1 || this.moduleCount <= r + rd) continue;
+                        for (let cd = -1; cd <= 7; cd++) {
+                            if (c + cd <= -1 || this.moduleCount <= c + cd) continue;
+                            this.modules[r + rd][c + cd] =
+                                (0 <= rd && rd <= 6 && (cd == 0 || cd == 6)) ||
+                                (0 <= cd && cd <= 6 && (rd == 0 || rd == 6)) ||
+                                (2 <= rd && rd <= 4 && 2 <= cd && cd <= 4);
+                        }
+                    }
+                },
+                setupTimingPattern: function () {
+                    for (let i = 8; i < this.moduleCount - 8; i++) {
+                        if (this.modules[i][6] === null) this.modules[i][6] = (i % 2 == 0);
+                        if (this.modules[6][i] === null) this.modules[6][i] = (i % 2 == 0);
+                    }
+                },
+                setupPositionAdjustPattern: function () {
+                    const pos = ALIGN_POS[this.typeNumber - 1];
+                    for (let i = 0; i < pos.length; i++) {
+                        for (let j = 0; j < pos.length; j++) {
+                            const r = pos[i], c = pos[j];
+                            if (this.modules[r][c] !== null) continue;
+                            for (let rd = -2; rd <= 2; rd++) {
+                                for (let cd = -2; cd <= 2; cd++) {
+                                    this.modules[r + rd][c + cd] = (Math.abs(rd) == 2 || Math.abs(cd) == 2 || (rd == 0 && cd == 0));
+                                }
+                            }
+                        }
+                    }
+                },
+                setupTypeInfo: function (test, maskPattern) {
+                    const data = (this.errorCorrectLevel << 3) | maskPattern;
+                    let bits = data << 10;
+                    while (QRMath.glog(bits) >= QRMath.glog(0x537)) {
+                        bits ^= (0x537 << (QRMath.glog(bits) - QRMath.glog(0x537)));
+                    }
+                    const mod = ((data << 10) | bits) ^ 0x5412;
+                    for (let i = 0; i < 15; i++) {
+                        const bit = !test && ((mod >> i) & 1) == 1;
+                        if (i < 6) this.modules[i][8] = bit;
+                        else if (i < 8) this.modules[i + 1][8] = bit;
+                        else this.modules[this.moduleCount - 15 + i][8] = bit;
+                        if (i < 8) this.modules[8][this.moduleCount - i - 1] = bit;
+                        else if (i < 9) this.modules[8][15 - i - 1 + 1] = bit;
+                        else this.modules[8][15 - i - 1] = bit;
+                    }
+                    this.modules[this.moduleCount - 8][8] = !test;
+                },
+                setupTypeNumber: function () {
+                    let bits = this.typeNumber << 12;
+                    while (QRMath.glog(bits) >= QRMath.glog(0x1f25)) {
+                        bits ^= (0x1f25 << (QRMath.glog(bits) - QRMath.glog(0x1f25)));
+                    }
+                    const mod = (this.typeNumber << 12) | bits;
+                    for (let i = 0; i < 18; i++) {
+                        const bit = ((mod >> i) & 1) == 1;
+                        this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = bit;
+                        this.modules[i % 3 + this.moduleCount - 8 - 3][Math.floor(i / 3)] = bit;
+                    }
+                },
+                createData: function () {
+                    const rsBlocks = QRRSBlock.getRSBlocks(this.typeNumber);
+                    const buffer = new QRBitBuffer();
+                    for (let i = 0; i < this.dataList.length; i++) {
+                        const data = this.dataList[i];
+                        buffer.put(data.mode, 4);
+                        buffer.put(data.getLength(), this.typeNumber < 10 ? 8 : 16);
+                        data.write(buffer);
+                    }
+                    let totalDataCount = 0;
+                    for (let i = 0; i < rsBlocks.length; i++) totalDataCount += rsBlocks[i].dataCount;
+                    if (buffer.length + 4 <= totalDataCount * 8) buffer.put(0, 4);
+                    while (buffer.length % 8 != 0) buffer.putBit(false);
+                    while (true) {
+                        if (buffer.length >= totalDataCount * 8) break;
+                        buffer.put(0xEC, 8);
+                        if (buffer.length >= totalDataCount * 8) break;
+                        buffer.put(0x11, 8);
+                    }
+                    return this.createBytes(buffer, rsBlocks);
+                },
+                createBytes: function (buffer, rsBlocks) {
+                    let offset = 0;
+                    let maxDcCount = 0, maxEcCount = 0;
+                    const dcdata = new Array(rsBlocks.length);
+                    const ecdata = new Array(rsBlocks.length);
+                    for (let r = 0; r < rsBlocks.length; r++) {
+                        const dcCount = rsBlocks[r].dataCount;
+                        const ecCount = rsBlocks[r].totalCount - dcCount;
+                        maxDcCount = Math.max(maxDcCount, dcCount);
+                        maxEcCount = Math.max(maxEcCount, ecCount);
+                        dcdata[r] = new Array(dcCount);
+                        for (let i = 0; i < dcdata[r].length; i++) dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+                        offset += dcCount;
+                        let rsPoly = new QRPolynomial([1], 0);
+                        for (let i = 0; i < ecCount; i++) rsPoly = rsPoly.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0));
+                        const rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+                        const modPoly = rawPoly.mod(rsPoly);
+                        ecdata[r] = new Array(rsPoly.getLength() - 1);
+                        for (let i = 0; i < ecdata[r].length; i++) {
+                            const modIndex = i + modPoly.getLength() - ecdata[r].length;
+                            ecdata[r][i] = (modIndex >= 0) ? modPoly.get(modIndex) : 0;
+                        }
+                    }
+                    let totalCodeCount = 0;
+                    for (let i = 0; i < rsBlocks.length; i++) totalCodeCount += rsBlocks[i].totalCount;
+                    const data = new Array(totalCodeCount);
+                    let index = 0;
+                    for (let i = 0; i < maxDcCount; i++) {
+                        for (let r = 0; r < rsBlocks.length; r++) if (i < dcdata[r].length) data[index++] = dcdata[r][i];
+                    }
+                    for (let i = 0; i < maxEcCount; i++) {
+                        for (let r = 0; r < rsBlocks.length; r++) if (i < ecdata[r].length) data[index++] = ecdata[r][i];
+                    }
+                    return data;
+                },
+                mapData: function (data, maskPattern) {
+                    let inc = -1, row = this.moduleCount - 1, bitIndex = 7, byteIndex = 0;
+                    for (let col = this.moduleCount - 1; col > 0; col -= 2) {
+                        if (col == 6) col--;
+                        while (true) {
+                            for (let c = 0; c < 2; c++) {
+                                if (this.modules[row][col - c] === null) {
+                                    let dark = false;
+                                    if (byteIndex < data.length) dark = (((data[byteIndex] >>> bitIndex) & 1) == 1);
+                                    const mask = (row + col - c) % 2 == 0;
+                                    if (mask) dark = !dark;
+                                    this.modules[row][col - c] = dark;
+                                    bitIndex--;
+                                    if (bitIndex == -1) { byteIndex++; bitIndex = 7; }
+                                }
+                            }
+                            row += inc;
+                            if (row < 0 || this.moduleCount <= row) {
+                                row -= inc;
+                                inc = -inc;
+                                break;
+                            }
+                        }
+                    }
+                },
+                toSVG: function (size = 240) {
+                    const count = this.moduleCount;
+                    let path = "";
+                    for (let r = 0; r < count; r++) {
+                        for (let c = 0; c < count; c++) {
+                            if (this.isDark(r, c)) path += `M${c},${r}h1v1h-1z `;
+                        }
+                    }
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${count} ${count}" width="${size}" height="${size}" style="background:#fff; border-radius:10px; padding:10px; box-shadow:var(--shadow-md)"><path fill="#000" d="${path}"/></svg>`;
+                }
+            };
+
+            function generateSVG(text, size = 240) {
+                const len = text.length;
+                const cap = [17, 32, 53, 78, 106, 134, 154, 192, 230, 271, 321, 367, 425, 458, 520, 586, 644, 718, 792, 858];
+                let type = 1;
+                while (type <= 20 && cap[type - 1] < len) type++;
+                if (type > 20) throw new Error("Texto demasiado largo para el generador QR (" + len + " bytes, máx 858)");
+                const qr = new QRCode(type);
+                qr.addData(text);
+                qr.make();
+                return qr.toSVG(size);
+            }
+
+            return { generateSVG };
+        })();
+
+        $("btnGenerarQR").onclick = async () => {
+            try {
+                const payload = { app: "control-ingresos-laborales", cfg: S.cfg, q: S.q };
+                const codigo = await comprimirPayload(payload);
+
+                const esLocalFile = window.location.protocol === "file:";
+                const url = esLocalFile
+                    ? ""
+                    : (window.location.origin + window.location.pathname + "#sync=" + codigo);
+
+                const contenidoQR = url || codigo;
+
+                if (contenidoQR.length > 850) {
+                    alert("Tu historial tiene demasiados períodos para un solo código QR (" + contenidoQR.length + " caracteres). Por favor usa la pestaña 'Por Código' o 'Copia de Seguridad (JSON)' para transferir todos tus datos sin límites.");
+                    return;
+                }
+
+                const svg = QRCodeLib.generateSVG(contenidoQR, 260);
+                $("qrSvgWrapper").innerHTML = svg;
+
+                const descEl = $("modalQRDesc");
+                if (descEl) {
+                    if (esLocalFile) {
+                        descEl.innerHTML = "⚠️ Estás ejecutando la aplicación como archivo local (<code>file://</code>). Tu celular no puede abrir un enlace a tu disco de PC. Escanea este código con una app lectora de QR para <strong>copiar el código</strong>, o usa la pestaña <strong>Por Código</strong> para enviártelo por WhatsApp en un toque.";
+                    } else {
+                        descEl.textContent = "Apunta con la cámara de tu celular a este código para abrir la app y transferir tus datos.";
+                    }
+                }
+
+                $("btnCopiarLinkQR").onclick = async () => {
+                    const ok = await copiarTexto(url || codigo);
+                    mostrarToast(ok ? "¡Copiado al portapapeles!" : "No se pudo copiar automáticamente");
+                };
+                $("modalQR").classList.add("open");
+            } catch (e) {
+                alert("No se pudo generar el código QR: " + e.message);
+            }
+        };
+
+        $("modalQRCerrar").onclick = () => $("modalQR").classList.remove("open");
+
+        // 3. Opción Nube Privada (GitHub Gist)
+        const savedToken = LS.getItem("sync_gist_token") || "";
+        const savedGistId = LS.getItem("sync_gist_id") || "";
+        const savedAutoSync = LS.getItem("sync_gist_auto") === "1";
+        $("gistToken").value = savedToken;
+        $("gistId").value = savedGistId;
+        $("chkAutoSyncGist").checked = savedAutoSync;
+
+        $("gistToken").addEventListener("change", () => {
+            LS.setItem("sync_gist_token", $("gistToken").value.trim());
+        });
+        $("gistId").addEventListener("change", () => {
+            LS.setItem("sync_gist_id", $("gistId").value.trim());
+        });
+        $("chkAutoSyncGist").addEventListener("change", () => {
+            LS.setItem("sync_gist_auto", $("chkAutoSyncGist").checked ? "1" : "0");
+        });
+
+        async function sincronizarGistSubir(silent = false) {
+            const token = $("gistToken").value.trim() || LS.getItem("sync_gist_token");
+            if (!token) {
+                if (!silent) alert("Ingresa primero tu Personal Access Token de GitHub con permiso 'gist'.");
+                return false;
+            }
+            let gistId = $("gistId").value.trim() || LS.getItem("sync_gist_id");
+            const payload = { app: "control-ingresos-laborales", actualizado: new Date().toISOString(), cfg: S.cfg, q: S.q };
+            const bodyData = {
+                description: "Control de Ingresos Laborales - Respaldo privado",
+                files: {
+                    "control_ingresos.json": { content: JSON.stringify(payload, null, 2) }
+                }
+            };
+            try {
+                let res;
+                if (gistId) {
+                    res = await fetch("https://api.github.com/gists/" + gistId, {
+                        method: "PATCH",
+                        headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+                        body: JSON.stringify(bodyData)
+                    });
+                } else {
+                    bodyData.public = false;
+                    res = await fetch("https://api.github.com/gists", {
+                        method: "POST",
+                        headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+                        body: JSON.stringify(bodyData)
+                    });
+                }
+                if (!res.ok) throw new Error("GitHub respondió con error: " + res.status);
+                const json = await res.json();
+                if (json.id && json.id !== gistId) {
+                    gistId = json.id;
+                    $("gistId").value = gistId;
+                    LS.setItem("sync_gist_id", gistId);
+                }
+                if (!silent) mostrarToast("¡Guardado en tu GitHub Gist privado!");
+                return true;
+            } catch (e) {
+                if (!silent) alert("Error al subir a GitHub: " + e.message);
+                return false;
+            }
+        }
+
+        $("btnSubirNube").onclick = () => sincronizarGistSubir(false);
+
+        $("btnDescargarNube").onclick = async () => {
+            const token = $("gistToken").value.trim() || LS.getItem("sync_gist_token");
+            const gistId = $("gistId").value.trim() || LS.getItem("sync_gist_id");
+            if (!token || !gistId) {
+                alert("Ingresa tu Token de GitHub y el ID del Gist para descargar.");
+                return;
+            }
+            try {
+                const res = await fetch("https://api.github.com/gists/" + gistId, {
+                    headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" }
+                });
+                if (!res.ok) throw new Error("GitHub respondió con error: " + res.status);
+                const json = await res.json();
+                const file = json.files && json.files["control_ingresos.json"];
+                if (!file || !file.content) throw new Error("El Gist no contiene el archivo control_ingresos.json");
+                const data = JSON.parse(file.content);
+                const san = sanear(data);
+                if (!san) throw new Error("El contenido del Gist no tiene el formato válido");
+                const nPer = Object.keys(san.S.q).length;
+                const nDias = Object.values(san.S.q).reduce((a, r) => a + (r.dias || []).length, 0);
+                pedirConfirmacion(
+                    "Descargar desde GitHub Gist",
+                    `Se encontraron ${nPer} períodos y ${nDias} turnos en la nube. ¿Deseas aplicar estos datos en este dispositivo?`,
+                    () => {
+                        S = san.S;
+                        migrarBono(san.bonoLegado);
+                        aplicarCfgUI();
+                        guardar(true);
+                        cargar();
+                        mostrarToast("¡Datos descargados de la nube con éxito!");
+                    },
+                    "Descargar"
+                );
+            } catch (e) {
+                alert("Error al descargar de GitHub: " + e.message);
+            }
+        };
+
+        // Dispara auto-sincronización en la nube si está activada (con debounce para optimizar peticiones)
+        let autoSyncTimer = null;
+        function autoSyncCheck() {
+            if (LS.getItem("sync_gist_auto") === "1" && LS.getItem("sync_gist_token") && LS.getItem("sync_gist_id")) {
+                clearTimeout(autoSyncTimer);
+                autoSyncTimer = setTimeout(() => {
+                    sincronizarGistSubir(true).catch(() => {});
+                }, 1500);
+            }
+        }
+
+        // =============================================================
+        // CONSTRUCCIÓN DE INTERFAZ E INICIALIZACIÓN
+        // =============================================================
+        $("btns").innerHTML = "";
+        $("horas").innerHTML = "";
+        $("recAuto").innerHTML = "";
+        BTN.forEach(b => {
+            const e = document.createElement("button");
+            e.id = "b_" + b[0];
+            e.className = claseBtn(b[0]);
+            e.innerHTML = `<span class="metric-label">${b[1]}</span><span class="metric-val">$0</span>`;
+            e.onclick = () => {
+                if (b[0] === "hist") {
+                    activarTab("view-horas");
+                    return;
+                }
+                sel = b[0];
+                try { LS.setItem("ultima_sel", sel); } catch (_) { }
+                pintar();
+            };
+            $("btns").appendChild(e);
+        });
+
+        // Horas extra: campos editables. Recargos: solo lectura (acumulado automático de los turnos)
+        TIPOS.forEach(t => {
+            const w = document.createElement("div");
+            if (t[3]) {
+                w.innerHTML = `<label for="h_${t[0]}">${t[1]}</label><input type="text" id="h_${t[0]}" inputmode="decimal" value="0">`;
+                $("horas").appendChild(w);
+            } else {
+                w.innerHTML = `<label for="h_${t[0]}">${t[1]}</label><input type="text" id="h_${t[0]}" value="0 h" readonly tabindex="-1"><span class="ro-val" id="v_${t[0]}">$0</span>`;
+                $("recAuto").appendChild(w);
+            }
+        });
+
+        // Refleja la configuración guardada en los campos de Ajustes
+        function aplicarCfgUI() {
+            $("salario").value = S.cfg.sal;
+            $("turno").value = S.cfg.turno;
+            $("desc").value = S.cfg.desc;
+            $("noc").value = S.cfg.noc;
+            $("divisorHoras").value = String(S.cfg.div);
+        }
+
+        // Detección automática de sincronización por URL hash (#sync=...)
+        async function checkUrlSync() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith("#sync=")) {
+                const raw = hash.slice(6);
+                try {
+                    history.replaceState(null, "", window.location.pathname + window.location.search);
+                } catch (_) { window.location.hash = ""; }
+                await procesarCodigoSync(raw, "Código QR / Enlace");
+            }
+        }
+
+        // Carga de configuración inicial
+        leer();
+        if (bonoLegado > 0) {
+            migrarBono(bonoLegado);
+            bonoLegado = 0;
+            guardar(true);
+        }
+        aplicarCfgUI();
+
+        // Determinar período activo inteligente:
+        // 1. Último período visto por el usuario en este dispositivo
+        // 2. Si no hay registro, el período más reciente que contenga turnos o registros
+        // 3. Como fallback, la quincena actual de la fecha de hoy
+        const hoy = new Date();
+        const mHoy = hoy.getFullYear() + "-" + p2(hoy.getMonth() + 1);
+        const qHoy = hoy.getDate() <= 15 ? 1 : 2;
+
+        const ultM = LS.getItem("ultimo_M");
+        const ultQ = Number(LS.getItem("ultimo_Q"));
+
+        const selGuardada = LS.getItem("ultima_sel");
+        if (["base", "extra", "recargo", "aux", "ded"].includes(selGuardada)) sel = selGuardada;
+
+        if (/^\d{4}-(0[1-9]|1[0-2])$/.test(ultM || "") && (ultQ === 1 || ultQ === 2)) {
+            M = ultM;
+            Q = ultQ;
+        } else {
+            const periodosConDatos = Object.keys(S.q || {}).filter(k => {
+                const reg = S.q[k];
+                return reg && ((reg.dias && reg.dias.length > 0) || reg.bono > 0 || reg.otras > 0 || Object.values(reg.h || {}).some(v => v > 0));
+            }).sort();
+
+            if (periodosConDatos.length > 0) {
+                const ultimoK = periodosConDatos[periodosConDatos.length - 1];
+                M = ultimoK.slice(0, 7);
+                Q = Number(ultimoK.slice(8)) || 1;
+            } else {
+                M = mHoy;
+                Q = qHoy;
+            }
+        }
+
+        $("jf").value = hoy.getFullYear() + "-" + p2(hoy.getMonth() + 1) + "-" + p2(hoy.getDate());
+
+        // Event listeners (solo campos editables de configuración y del período)
+        document.querySelectorAll("#salario, #bono, #otras, #turno, #desc, #noc").forEach(i => {
+            i.addEventListener("input", cambio);
+        });
+        $("horas").addEventListener("input", marcarHorasSucias);
+        $("horas").addEventListener("keydown", e => {
+            if (e.key === "Enter") { e.preventDefault(); guardarHoras(); }
+        });
+        $("btnGuardarHoras").addEventListener("click", guardarHoras);
+        $("divisorHoras").addEventListener("change", cambio);
+
+        $("mes").addEventListener("input", () => {
+            if ($("mes").value) {
+                M = $("mes").value;
+                LS.setItem("ultimo_M", M);
+                cargar();
+            }
+        });
+
+        $("q1").onclick = () => { Q = 1; LS.setItem("ultimo_Q", "1"); cargar(); };
+        $("q2").onclick = () => { Q = 2; LS.setItem("ultimo_Q", "2"); cargar(); };
+
+        function guardarTodo() {
+            if (!window.__appLista) return; // no pisar datos si la carga no terminó bien
+            volcarHorasSucias();
+            try {
+                LS.setItem("ultimo_M", M);
+                LS.setItem("ultimo_Q", String(Q));
+                LS.setItem("ingresos_q", JSON.stringify(S));
+            } catch (_) { }
+        }
+        window.addEventListener("beforeunload", guardarTodo);
+        window.addEventListener("pagehide", guardarTodo);
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") guardarTodo(); });
+
+        // Carga inicial
+        cargar();
+        {
+            const vistasOk = [...document.querySelectorAll(".tab-btn")].map(b => b.dataset.view);
+            const vg = LS.getItem("ultima_vista");
+            activarTab(vistasOk.includes(vg) ? vg : "view-resumen", true);
+        }
+        window.__appLista = true;
+        if (window.__sinAlmacenamiento) {
+            mostrarAviso("Tu navegador bloquea el almacenamiento: lo que registres no se guardará al cerrar la página. Ábrela en Chrome o en otro navegador.", "", "warn");
+        }
+        checkUrlSync();
+
+        // =============================================================
+        // INSTALACIÓN PWA Y ACCESO DIRECTO DE ESCRITORIO / MÓVIL
+        // =============================================================
+        let deferredPrompt = null;
+        window.addEventListener("beforeinstallprompt", e => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if ($("boxPwaNative")) $("boxPwaNative").style.display = "block";
+            if ($("btnInstalarHeaderTxt")) $("btnInstalarHeaderTxt").textContent = "Instalar App";
+        });
+
+        window.addEventListener("appinstalled", () => {
+            deferredPrompt = null;
+            if ($("boxPwaNative")) $("boxPwaNative").style.display = "none";
+            mostrarToast("¡Aplicación instalada exitosamente!");
+        });
+
+        function abrirModalInstalacion() {
+            $("modalInstalar").classList.add("open");
+        }
+
+        function cerrarModalInstalacion() {
+            $("modalInstalar").classList.remove("open");
+        }
+
+        function descargarAccesoDirecto() {
+            const loc = window.location.href;
+            const shortcut = `[InternetShortcut]\r\nURL=${loc}\r\nIconIndex=0\r\n`;
+            descargar("Control de Ingresos Laborales.url", shortcut, "application/internet-shortcut");
+            mostrarToast("Acceso directo de Windows descargado. Muévelo a tu escritorio.");
+        }
+
+        if ($("btnInstalarHeader")) {
+            $("btnInstalarHeader").onclick = () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(choiceResult => {
+                        if (choiceResult && choiceResult.outcome === "accepted") {
+                            deferredPrompt = null;
+                        }
+                    });
+                } else {
+                    abrirModalInstalacion();
+                }
+            };
+        }
+
+        if ($("btnAbrirInstalarAjustes")) {
+            $("btnAbrirInstalarAjustes").onclick = abrirModalInstalacion;
+        }
+
+        if ($("btnDescargarAccesoDirectoAjustes")) {
+            $("btnDescargarAccesoDirectoAjustes").onclick = descargarAccesoDirecto;
+        }
+
+        if ($("btnDescargarAccesoDirectoModal")) {
+            $("btnDescargarAccesoDirectoModal").onclick = descargarAccesoDirecto;
+        }
+
+        if ($("btnInstalarPwaDirecto")) {
+            $("btnInstalarPwaDirecto").onclick = () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(choiceResult => {
+                        if (choiceResult && choiceResult.outcome === "accepted") {
+                            deferredPrompt = null;
+                            cerrarModalInstalacion();
+                        }
+                    });
+                }
+            };
+        }
+
+        if ($("modalInstalarCerrar")) $("modalInstalarCerrar").onclick = cerrarModalInstalacion;
+        if ($("modalInstalarCerrarX")) $("modalInstalarCerrarX").onclick = cerrarModalInstalacion;
+
+        // Pestañas del modal de instalación
+        document.querySelectorAll(".inst-tab-btn").forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll(".inst-tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".inst-panel").forEach(p => p.style.display = "none");
+                btn.classList.add("active");
+                const target = $(btn.dataset.instTab);
+                if (target) target.style.display = "block";
+            };
+        });
+
+        // Registrar Service Worker para soporte PWA cuando esté servido por http/https
+        if ("serviceWorker" in navigator && (location.protocol === "http:" || location.protocol === "https:")) {
+            navigator.serviceWorker.register("sw.js", { scope: "./" })
+                .then(reg => console.log("PWA Service Worker activo:", reg.scope))
+                .catch(err => console.warn("PWA Service Worker no registrado:", err));
+        }
+    </script>
+
+
+</body></html>
